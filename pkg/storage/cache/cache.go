@@ -2,24 +2,28 @@ package cache
 
 import (
 	"bytes"
-	"errors"
+	"context"
+	"encoding/hex"
 	"fmt"
 	"io"
+	"reflect"
+	"strings"
 	"sync"
 	"time"
 
+	"github.com/ClickHouse/clickhouse-go/v2"
 	"github.com/dgraph-io/badger/v2"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/valyala/bytebufferpool"
-
 	"github.com/pyroscope-io/pyroscope/pkg/storage/cache/lfu"
+	"github.com/valyala/bytebufferpool"
 )
 
 type Cache struct {
-	db      *badger.DB
-	lfu     *lfu.Cache
-	metrics *Metrics
-	codec   Codec
+	db        *badger.DB
+	ClickConn clickhouse.Conn
+	lfu       *lfu.Cache
+	metrics   *Metrics
+	codec     Codec
 
 	prefix string
 	ttl    time.Duration
@@ -31,6 +35,7 @@ type Cache struct {
 
 type Config struct {
 	*badger.DB
+	ClickConn clickhouse.Conn
 	*Metrics
 	Codec
 
@@ -82,6 +87,20 @@ func New(c Config) *Cache {
 	cache.lfu.WriteBackChannel = writeBackChannel
 	cache.lfu.TTL = int64(c.TTL.Seconds())
 
+	conn, err := clickhouse.Open(&clickhouse.Options{
+		Addr: []string{"127.0.0.1:9000"},
+		Auth: clickhouse.Auth{
+			Database: "default",
+			Username: "clickhouse",
+			Password: "clickhouse",
+		},
+	})
+	if err != nil {
+		fmt.Println("connection err:", err)
+	}
+
+	cache.ClickConn = conn
+
 	// start a goroutine for saving the evicted cache items to disk
 	go func() {
 		for e := range evictionChannel {
@@ -111,16 +130,61 @@ func (cache *Cache) Put(key string, val interface{}) {
 	cache.lfu.Set(key, val)
 }
 
+func printInterface(value interface{}) {
+	v := reflect.ValueOf(value)
+
+	switch v.Kind() {
+	case reflect.Ptr:
+		if v.IsNil() {
+			fmt.Println("nil")
+			return
+		}
+		printInterface(v.Elem().Interface())
+
+	case reflect.Interface:
+		fmt.Printf("(%v, %v)\n", v.Type(), v.Interface())
+		printInterface(v.Elem().Interface())
+
+	case reflect.Struct:
+		fmt.Printf("%v {\n", v.Type().Name())
+		for i := 0; i < v.NumField(); i++ {
+			field := v.Field(i)
+			fmt.Printf("\t%v: ", v.Type().Field(i).Name)
+			printInterface(field.Interface())
+		}
+		fmt.Println("}")
+
+	case reflect.Slice, reflect.Array:
+		fmt.Printf("%v [", v.Type().Name())
+		for i := 0; i < v.Len(); i++ {
+			if i > 0 {
+				fmt.Print(", ")
+			}
+			printInterface(v.Index(i).Interface())
+		}
+		fmt.Println("]")
+
+	default:
+		fmt.Println(v)
+	}
+}
+
 func (cache *Cache) saveToDisk(key string, val interface{}) error {
+	fmt.Println("savetodisk key ...", key)
+	fmt.Println("savetodisk val ...", val)
+	ctx := context.Background()
 	b := bytebufferpool.Get()
 	defer bytebufferpool.Put(b)
 	if err := cache.codec.Serialize(b, key, val); err != nil {
 		return fmt.Errorf("serialization: %w", err)
 	}
 	cache.metrics.DBWrites.Observe(float64(b.Len()))
-	return cache.db.Update(func(txn *badger.Txn) error {
-		return txn.Set([]byte(cache.prefix+key), b.Bytes())
-	})
+
+	bytes := b.Bytes()
+	fmt.Println("typeof ....", reflect.TypeOf(bytes))
+	q := fmt.Sprintf("INSERT INTO cache (key, val) VALUES ('%s', '%s')", key, hex.EncodeToString(bytes))
+	err := cache.ClickConn.Exec(ctx, q)
+	return err
 }
 
 func (cache *Cache) Sync() error {
@@ -158,10 +222,11 @@ func (cache *Cache) WriteBack() {
 }
 
 func (cache *Cache) Delete(key string) error {
+	ctx := context.Background()
 	cache.lfu.Delete(key)
-	return cache.db.Update(func(txn *badger.Txn) error {
-		return txn.Delete([]byte(cache.prefix + key))
-	})
+	q := fmt.Sprintf("DELETE FROM cache WHERE key='%s'", key)
+	err := cache.ClickConn.Exec(ctx, q)
+	return err
 }
 
 func (cache *Cache) Discard(key string) {
@@ -172,48 +237,65 @@ func (cache *Cache) Discard(key string) {
 // In both cache and database
 func (cache *Cache) DiscardPrefix(prefix string) error {
 	cache.lfu.DeletePrefix(prefix)
-	return dropPrefix(cache.db, []byte(cache.prefix+prefix))
+	return dropPrefix(cache.ClickConn, cache.prefix+prefix)
 }
 
 const defaultBatchSize = 1 << 10 // 1K items
 
-func dropPrefix(db *badger.DB, p []byte) error {
+func dropPrefix(ClickConn clickhouse.Conn, p string) error {
 	var err error
-	for more := true; more; {
-		if more, err = dropPrefixBatch(db, p, defaultBatchSize); err != nil {
+	ctx := context.Background()
+
+	// Fetch the keys to delete in batches of 1000
+	var keys []string
+	offset := 0
+	for {
+		q := fmt.Sprintf("SELECT key FROM cache WHERE key STARTS WITH '%s' LIMIT 1000 OFFSET %d", p, offset)
+		rows, err := ClickConn.Query(ctx, q)
+		if err != nil {
+			return err
+		}
+		defer rows.Close()
+
+		var k string
+		for rows.Next() {
+			if err = rows.Scan(&k); err != nil {
+				return err
+			}
+			keys = append(keys, k)
+		}
+		if err = rows.Err(); err != nil {
+			return err
+		}
+
+		// If we fetched fewer than 1000 rows, we're done
+		if len(keys) < 1000 {
+			break
+		}
+
+		offset += 1000
+	}
+
+	// Delete the keys in batches of 1000
+	for len(keys) > 0 {
+		batchSize := 1000
+		if len(keys) < batchSize {
+			batchSize = len(keys)
+		}
+		batch := keys[:batchSize]
+		keys = keys[batchSize:]
+
+		q := fmt.Sprintf("ALTER TABLE cache DELETE WHERE key IN ('%s')", strings.Join(batch, "', '"))
+		if err = ClickConn.Exec(ctx, q); err != nil {
 			return err
 		}
 	}
+
 	return nil
 }
 
-func dropPrefixBatch(db *badger.DB, p []byte, n int) (bool, error) {
-	keys := make([][]byte, 0, n)
-	err := db.View(func(txn *badger.Txn) error {
-		it := txn.NewIterator(badger.IteratorOptions{Prefix: p})
-		defer it.Close()
-		for it.Rewind(); it.Valid(); it.Next() {
-			if len(keys) == cap(keys) {
-				return nil
-			}
-			keys = append(keys, it.Item().KeyCopy(nil))
-		}
-		return nil
-	})
-	if err != nil || len(keys) == 0 {
-		return false, err
-	}
-	batch := db.NewWriteBatch()
-	defer batch.Cancel()
-	for i := range keys {
-		if err = batch.Delete(keys[i]); err != nil {
-			return false, err
-		}
-	}
-	return true, batch.Flush()
-}
-
 func (cache *Cache) GetOrCreate(key string) (interface{}, error) {
+	// fmt.Println("GetOrCreate ..... keval")
 	return cache.get(key, true)
 }
 
@@ -223,28 +305,29 @@ func (cache *Cache) Lookup(key string) (interface{}, bool) {
 }
 
 func (cache *Cache) get(key string, createNotFound bool) (interface{}, error) {
+	ctx := context.Background()
 	cache.metrics.ReadsCounter.Inc()
 	return cache.lfu.GetOrSet(key, func() (interface{}, error) {
+		// fmt.Println("again ... keval")
 		cache.metrics.MissesCounter.Inc()
-		var buf []byte
-		err := cache.db.View(func(txn *badger.Txn) error {
-			item, err := txn.Get([]byte(cache.prefix + key))
-			if err != nil {
-				return err
-			}
-			buf, err = item.ValueCopy(buf)
-			return err
-		})
 
-		switch {
-		default:
-			return nil, err
-		case err == nil:
-		case errors.Is(err, badger.ErrKeyNotFound):
+		q := fmt.Sprintf("SELECT val FROM cache WHERE key='%s'", key)
+		row, err := cache.ClickConn.Query(ctx, q)
+		if err != nil {
+			return nil, fmt.Errorf("error querying cache database: %w", err)
+		}
+		defer row.Close()
+
+		if !row.Next() {
 			if createNotFound {
 				return cache.codec.New(key), nil
 			}
 			return nil, nil
+		}
+
+		var buf []byte
+		if err := row.Scan(&buf); err != nil {
+			return nil, fmt.Errorf("error scanning cache row: %w", err)
 		}
 
 		cache.metrics.DBReads.Observe(float64(len(buf)))
