@@ -143,12 +143,12 @@ func normalizeTime(t time.Time) time.Time {
 // down-sampling root node will be passed to the callback function,
 // and relationship r will be proportional to the down-sampling factor.
 //
-//  relationship                               overlap read             overlap write
-// 	inside  rel = iota   // | S E |            <1                       1/1
-// 	match                // matching ranges    1/1                      1/1
-// 	outside              // | | S E            0/1                      0/1
-// 	overlap              // | S | E            <1                       <1
-// 	contain              // S | | E            1/1                      <1
+//	 relationship                               overlap read             overlap write
+//		inside  rel = iota   // | S E |            <1                       1/1
+//		match                // matching ranges    1/1                      1/1
+//		outside              // | | S E            0/1                      0/1
+//		overlap              // | S | E            <1                       <1
+//		contain              // S | | E            1/1                      <1
 func (sn *streeNode) get(ctx context.Context, s *Segment, st, et time.Time, cb func(*streeNode, *big.Rat)) {
 	r := sn.relationship(st, et)
 	trace.Logf(ctx, traceCatNodeGet, "D=%d T=%v P=%v R=%v", sn.depth, sn.time.Unix(), sn.present, r)
@@ -224,9 +224,9 @@ func (sn *streeNode) walkNodesToDelete(t *RetentionPolicy, cb func(depth int, t 
 }
 
 type Segment struct {
-	m    sync.RWMutex
-	root *streeNode
-
+	m               sync.RWMutex
+	root            *streeNode
+	accountUID      string
 	spyName         string
 	sampleRate      uint32
 	units           metadata.Units
@@ -412,6 +412,7 @@ func (s *Segment) WalkNodesToDelete(t *RetentionPolicy, cb func(depth int, t tim
 
 func (s *Segment) SetMetadata(md metadata.Metadata) {
 	s.m.Lock()
+	s.accountUID = md.AccountUID
 	s.spyName = md.SpyName
 	s.sampleRate = md.SampleRate
 	s.units = md.Units
@@ -422,6 +423,7 @@ func (s *Segment) SetMetadata(md metadata.Metadata) {
 func (s *Segment) GetMetadata() metadata.Metadata {
 	s.m.Lock()
 	md := metadata.Metadata{
+		AccountUID:      s.accountUID,
 		SpyName:         s.spyName,
 		SampleRate:      s.sampleRate,
 		Units:           s.units,

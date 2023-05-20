@@ -99,5 +99,6 @@ func (s *IngestionQueue) safePut(input *PutInput) (err error) {
 		}
 	}()
 	// TODO(kolesnikovae): It's better to derive a context that is cancelled on Stop.
+	// fmt.Println("s.putter >>> ", reflect.TypeOf(s.putter))
 	return s.putter.Put(context.TODO(), input)
 }

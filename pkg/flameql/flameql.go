@@ -3,7 +3,8 @@ package flameql
 import "regexp"
 
 type Query struct {
-	AppName  string
+	AppName string
+	// AccountUID string
 	Matchers []*TagMatcher
 
 	q string // The original query string.

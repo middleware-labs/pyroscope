@@ -3,6 +3,7 @@ package remotewrite
 import (
 	"context"
 	"fmt"
+	"reflect"
 	"runtime/debug"
 	"sync"
 
@@ -109,5 +110,6 @@ func (q *IngestionQueue) safePut(input *ingestion.IngestInput) (err error) {
 		}
 	}()
 	// TODO(kolesnikovae): It's better to derive a context that is cancelled on Stop.
+	fmt.Println("q.ingester2", reflect.TypeOf(q.ingester))
 	return q.ingester.Ingest(context.TODO(), input)
 }

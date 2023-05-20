@@ -5,6 +5,12 @@ import (
 	"compress/gzip"
 	"context"
 	"fmt"
+	"io"
+	"runtime/debug"
+	"strings"
+	"sync"
+	"time"
+
 	"github.com/pyroscope-io/pyroscope/pkg/stackbuilder"
 	"github.com/pyroscope-io/pyroscope/pkg/storage"
 	"github.com/pyroscope-io/pyroscope/pkg/storage/metadata"
@@ -12,11 +18,6 @@ import (
 	"github.com/pyroscope-io/pyroscope/pkg/storage/tree"
 	"github.com/pyroscope-io/pyroscope/pkg/util/arenahelper"
 	"github.com/valyala/bytebufferpool"
-	"io"
-	"runtime/debug"
-	"strings"
-	"sync"
-	"time"
 )
 
 type StackFormatter int
@@ -31,6 +32,7 @@ const (
 var PPROFBufPool = bytebufferpool.Pool{}
 
 type ParserConfig struct {
+	AccountUID    string
 	Putter        storage.Putter
 	SpyName       string
 	Labels        map[string]string
@@ -94,6 +96,7 @@ func (p *VTStreamingParser) FreeArena() {
 	arenahelper.Free(p.arena)
 }
 func (p *VTStreamingParser) ParsePprof(ctx context.Context, startTime, endTime time.Time, bs []byte, cumulativeOnly bool) (err error) {
+	fmt.Println(" ParsePprof 2")
 	p.startTime = startTime
 	p.endTime = endTime
 	p.ctx = ctx
@@ -322,6 +325,21 @@ func (p *VTStreamingParser) put(stIndex int, st *valueType, l Labels, t *tree.Tr
 		}
 	}
 	pi.Key = p.buildName(sampleType, p.ResolveLabels(l))
+
+	// StartTime:       j.StartTime,
+	// 	EndTime:         j.EndTime,
+	// 	Key:             key,
+	// 	Val:             tree.New(),
+	// 	SpyName:         j.SpyName,
+	// 	SampleRate:      j.SampleRate,
+	// 	Units:           j.Units,
+	// 	AggregationType: j.AggregationType,
+
+	fmt.Println("PI StartTime", pi.StartTime)
+	fmt.Println("PI EndTime", pi.EndTime)
+	fmt.Println("PI Key", pi.Key)
+	fmt.Println("PI Val", pi.Val)
+
 	err = p.putter.Put(p.ctx, &pi)
 	return sampleTypeConfig.Cumulative, err
 }

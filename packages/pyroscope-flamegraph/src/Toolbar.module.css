@@ -1,0 +1,110 @@
+.navbar {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  margin: 10px 0;
+  justify-content: space-between;
+  height: 47px;
+  background-color: var(--ps-fl-toolbar-bg);
+  border: 1px solid var(--ps-ui-border);
+  padding: 4px;
+  align-items: center;
+}
+
+.viewType {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.navbar button {
+  color: var(--ps-toolbar-icon-color);
+}
+
+.toggleViewButton,
+.fitModeButton {
+  height: 37px;
+  min-width: auto;
+  width: 40px;
+  margin: 0 2px;
+  padding: 0;
+  border-color: transparent;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.toggleViewButton svg,
+.fitModeButton svg {
+  width: 22px;
+  height: 22px;
+}
+.toggleViewButton.selected,
+.selected.fitModeButton {
+  background-color: var(--ps-fl-toolbar-btn-bg);
+}
+.toggleViewButton.selected:hover,
+.selected.fitModeButton:hover {
+  background-color: var(--ps-fl-toolbar-btn-bg);
+}
+.toggleViewButton.selected svg,
+.selected.fitModeButton svg {
+  color: white;
+}
+
+.collapseNodeButton,
+.resetViewButton {
+  min-width: initial;
+  width: 40px;
+  height: 37px;
+  margin: 0 2px;
+  padding: 0;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.resetViewButton {
+  width: 40px;
+  min-width: initial;
+  margin: 0 2px;
+  padding: 0;
+}
+
+.divider {
+  width: 1px;
+  margin: 0 2px;
+  height: 37px;
+  background-color: var(--ps-ui-border);
+}
+
+.itemsContainer,
+.item {
+  display: flex;
+}
+
+.moreButton {
+  border-radius: 4px;
+  border: none;
+  padding: 0 5px;
+  height: 37px;
+}
+.moreButton.active,
+.moreButton.active:hover {
+  background-color: var(--ps-fl-toolbar-btn-bg);
+}
+.moreButton:hover {
+  background-color: var(--ps-ui-element-bg-highlight);
+  cursor: pointer;
+}
+
+.navbarCollapsedItems {
+  display: flex;
+  position: absolute;
+  right: 0;
+  top: 50px;
+  height: 47px;
+  background-color: var(--ps-fl-toolbar-bg);
+  border: 1px solid var(--ps-ui-border);
+  padding: 4px;
+  z-index: 1;
+} /*# sourceMappingURL=Toolbar.module.css.map */

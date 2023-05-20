@@ -48,11 +48,11 @@ func (svc AnnotationsService) CreateAnnotation(ctx context.Context, params model
 }
 
 // FindAnnotationsByTimeRange finds all annotations for an app in a time range
-func (svc AnnotationsService) FindAnnotationsByTimeRange(ctx context.Context, appName string, startTime time.Time, endTime time.Time) ([]model.Annotation, error) {
+func (svc AnnotationsService) FindAnnotationsByTimeRange(ctx context.Context, uid string, appName string, startTime time.Time, endTime time.Time) ([]model.Annotation, error) {
 	tx := svc.db.WithContext(ctx)
 	var u []model.Annotation
 
-	if err := tx.Where("app_name = ?", appName).Where("timestamp between ? and ?", startTime, endTime).Find(&u).Error; err != nil {
+	if err := tx.Where("accountUid = ?", uid).Where("app_name = ?", appName).Where("timestamp between ? and ?", startTime, endTime).Find(&u).Error; err != nil {
 		return u, err
 	}
 

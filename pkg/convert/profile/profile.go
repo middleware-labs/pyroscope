@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"reflect"
 
 	"github.com/pyroscope-io/pyroscope/pkg/convert"
 	"github.com/pyroscope-io/pyroscope/pkg/ingestion"
@@ -22,7 +23,11 @@ func (p *RawProfile) Bytes() ([]byte, error) { return p.RawData, nil }
 func (*RawProfile) ContentType() string { return "binary/octet-stream" }
 
 func (p *RawProfile) Parse(ctx context.Context, putter storage.Putter, exporter storage.MetricsExporter, md ingestion.Metadata) error {
+
+	fmt.Println("convert/profile")
+
 	input := &storage.PutInput{
+		AccountUID:      md.AccountUID,
 		StartTime:       md.StartTime,
 		EndTime:         md.EndTime,
 		Key:             md.Key,
@@ -36,6 +41,8 @@ func (p *RawProfile) Parse(ctx context.Context, putter storage.Putter, exporter 
 	cb := createParseCallback(input, exporter)
 	r := bytes.NewReader(p.RawData)
 	var err error
+
+	// fmt.Println("p.Format >>", p.Format)
 	switch p.Format {
 	case ingestion.FormatTrie:
 		err = transporttrie.IterateRaw(r, make([]byte, 0, 256), cb)
@@ -52,6 +59,8 @@ func (p *RawProfile) Parse(ctx context.Context, putter storage.Putter, exporter 
 	if err != nil {
 		return err
 	}
+
+	fmt.Println("putter struct", reflect.TypeOf(putter))
 
 	if err = putter.Put(ctx, input); err != nil {
 		return ingestion.Error{Err: err}

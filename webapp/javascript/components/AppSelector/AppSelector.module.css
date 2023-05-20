@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.container .appSelectorModal {
+  height: auto;
+  width: auto;
+  right: unset;
+  left: -100px;
+  z-index: 999;
+  max-width: calc(100vw - 290px);
+}
+.container .headerTitle {
+  text-transform: uppercase;
+  margin-left: 10px;
+  color: var(--ps-select-modal-title);
+  font-weight: 700;
+  font-size: 0.8em;
+}
+.container .search {
+  background: var(--ps-immutable-off-white);
+  color: var(--ps-immutable-placeholder-text);
+  border: 1px solid var(--ps-ui-border);
+  margin: 10px 0 10px 10px;
+}
+.container .noData {
+  width: 600px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} /*# sourceMappingURL=AppSelector.module.css.map */

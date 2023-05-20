@@ -1,0 +1,662 @@
+@import '../../../../webapp/sass/variables.css';
+pyro-flamegraph {
+  /* SCSS HEX */
+  /* SCSS HEX */
+  /* SCSS HEX */
+  /* SCSS HEX */
+  /* SCSS HEX */
+  /* SCSS HEX */
+  /* Document
+   * ========================================================================== */
+  /**
+   * Add border box sizing in all browsers (opinionated).
+   */
+  /**
+   * 1. Add text decoration inheritance in all browsers (opinionated).
+   * 2. Add vertical alignment inheritance in all browsers (opinionated).
+   */
+  /**
+   * 1. Use the default cursor in all browsers (opinionated).
+   * 2. Change the line height in all browsers (opinionated).
+   * 3. Use a 4-space tab width in all browsers (opinionated).
+   * 4. Remove the grey highlight on links in iOS (opinionated).
+   * 5. Prevent adjustments of font size after orientation changes in
+   *    IE on Windows Phone and in iOS.
+   * 6. Breaks words to prevent overflow in all browsers (opinionated).
+   */
+  /* Sections
+   * ========================================================================== */
+  /**
+   * Remove the margin in all browsers (opinionated).
+   */
+  /**
+   * Correct the font size and margin on `h1` elements within `section` and
+   * `article` contexts in Chrome, Edge, Firefox, and Safari.
+   */
+  /* Grouping content
+   * ========================================================================== */
+  /**
+   * Remove the margin on nested lists in Chrome, Edge, IE, and Safari.
+   */
+  /**
+   * Remove the margin on nested lists in Edge 18- and IE.
+   */
+  /**
+   * 1. Add the correct sizing in Firefox.
+   * 2. Show the overflow in Edge 18- and IE.
+   */
+  /**
+   * Add the correct display in IE.
+   */
+  /**
+   * Remove the list style on navigation lists in all browsers (opinionated).
+   */
+  /**
+   * 1. Correct the inheritance and scaling of font size in all browsers.
+   * 2. Correct the odd `em` font sizing in all browsers.
+   */
+  /* Text-level semantics
+   * ========================================================================== */
+  /**
+   * Remove the gray background on active links in IE 10.
+   */
+  /**
+   * Add the correct text decoration in Edge 18-, IE, and Safari.
+   */
+  /**
+   * Add the correct font weight in Chrome, Edge, and Safari.
+   */
+  /**
+   * 1. Correct the inheritance and scaling of font size in all browsers.
+   * 2. Correct the odd `em` font sizing in all browsers.
+   */
+  /**
+   * Add the correct font size in all browsers.
+   */
+  /* Embedded content
+   * ========================================================================== */
+  /*
+   * Change the alignment on media elements in all browsers (opinionated).
+   */
+  /**
+   * Add the correct display in IE 9-.
+   */
+  /**
+   * Add the correct display in iOS 4-7.
+   */
+  /**
+   * Remove the border on iframes in all browsers (opinionated).
+   */
+  /**
+   * Remove the border on images within links in IE 10-.
+   */
+  /**
+   * Change the fill color to match the text color in all browsers (opinionated).
+   */
+  /**
+   * Hide the overflow in IE.
+   */
+  /* Tabular data
+   * ========================================================================== */
+  /**
+   * Collapse border spacing in all browsers (opinionated).
+   */
+  /* Forms
+   * ========================================================================== */
+  /**
+   * Remove the margin on controls in Safari.
+   */
+  /**
+   * 1. Show the overflow in IE.
+   * 2. Remove the inheritance of text transform in Edge 18-, Firefox, and IE.
+   */
+  /**
+   * Correct the inability to style buttons in iOS and Safari.
+   */
+  /**
+   * 1. Change the inconsistent appearance in all browsers (opinionated).
+   * 2. Correct the padding in Firefox.
+   */
+  /**
+   * Show the overflow in Edge 18- and IE.
+   */
+  /**
+   * 1. Correct the text wrapping in Edge 18- and IE.
+   * 2. Correct the color inheritance from `fieldset` elements in IE.
+   */
+  /**
+   * 1. Add the correct display in Edge 18- and IE.
+   * 2. Add the correct vertical alignment in Chrome, Edge, and Firefox.
+   */
+  /**
+   * Remove the inheritance of text transform in Firefox.
+   */
+  /**
+   * 1. Remove the margin in Firefox and Safari.
+   * 2. Remove the default vertical scrollbar in IE.
+   * 3. Change the resize direction in all browsers (opinionated).
+   */
+  /**
+   * Remove the padding in IE 10-.
+   */
+  /**
+   * 1. Correct the odd appearance in Chrome, Edge, and Safari.
+   * 2. Correct the outline style in Safari.
+   */
+  /**
+   * Correct the cursor style of increment and decrement buttons in Safari.
+   */
+  /**
+   * Correct the text style of placeholders in Chrome, Edge, and Safari.
+   */
+  /**
+   * Remove the inner padding in Chrome, Edge, and Safari on macOS.
+   */
+  /**
+   * 1. Correct the inability to style upload buttons in iOS and Safari.
+   * 2. Change font properties to `inherit` in Safari.
+   */
+  /**
+   * Remove the inner border and padding of focus outlines in Firefox.
+   */
+  /**
+   * Restore the focus outline styles unset by the previous rule in Firefox.
+   */
+  /**
+   * Remove the additional :invalid styles in Firefox.
+   */
+  /* Interactive
+   * ========================================================================== */
+  /*
+   * Add the correct display in Edge 18- and IE.
+   */
+  /*
+   * Add the correct styles in Edge 18-, IE, and Safari.
+   */
+  /*
+   * Add the correct display in all browsers.
+   */
+  /* Scripting
+   * ========================================================================== */
+  /**
+   * Add the correct display in IE 9-.
+   */
+  /**
+   * Add the correct display in IE.
+   */
+  /* User interaction
+   * ========================================================================== */
+  /*
+   * 1. Remove the tapping delay in IE 10.
+   * 2. Remove the tapping delay on clickable elements
+        in all browsers (opinionated).
+   */
+  /**
+   * Add the correct display in IE 10-.
+   */
+  /* Accessibility
+   * ========================================================================== */
+  /**
+   * Change the cursor on busy elements in all browsers (opinionated).
+   */
+  /*
+   * Change the cursor on control elements in all browsers (opinionated).
+   */
+  /*
+   * Change the cursor on disabled, not-editable, or otherwise
+   * inoperable elements in all browsers (opinionated).
+   */
+  /*
+   * Change the display on visually hidden accessible elements
+   * in all browsers (opinionated).
+   */
+  /**
+   * 1. Change the inconsistent appearance in all browsers (opinionated).
+   * 2. Add typography inheritance in all browsers (opinionated).
+   */
+  /**
+   * Change the inconsistent appearance in all browsers (opinionated).
+   */
+  /**
+   * Change the inconsistent appearance in all browsers (opinionated).
+   */
+  /**
+   * Change the inconsistent appearance in IE (opinionated).
+   */
+  /**
+   * Correct the inconsistent appearance in IE (opinionated).
+   */
+  color: var(--ps-neutral-2);
+  -webkit-font-smoothing: antialiased;
+  font: 400 16px/1.7 -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+pyro-flamegraph pre,
+pyro-flamegraph code,
+pyro-flamegraph tt {
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  font-size: 14px;
+}
+pyro-flamegraph tt {
+  border-radius: 3px;
+  border: 1px solidver(--ps-gray-light-4);
+  padding: 2px 4px;
+  background-color: var(--ps-ui-foreground-text);
+}
+pyro-flamegraph .navbar {
+  display: flex;
+  height: 60px;
+  align-items: center;
+}
+pyro-flamegraph .navbar .logo {
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+  background-size: 40px 40px;
+  background-position: 0px 8px;
+  background-repeat: no-repeat;
+}
+pyro-flamegraph .navbar .logo::after {
+  content: 'Pyroscope';
+  font-weight: 400;
+  padding-left: 44px;
+  font-size: 25px;
+  vertical-align: text-top;
+}
+pyro-flamegraph .flamegraph-table {
+  width: 100%;
+  font-size: 14px;
+  border: 1px solid var(--ps-ui-border);
+}
+pyro-flamegraph .flamegraph-table thead th {
+  color: var(--ps-neutral-2);
+}
+pyro-flamegraph .flamegraph-table th,
+pyro-flamegraph .flamegraph-table td {
+  color: var(--ps-neutral-2);
+  text-align: right;
+  padding: 0px 10px;
+  border-left: 1px solid var(--ps-ui-border);
+  border-bottom: 1px solid var(--ps-ui-border);
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
+}
+pyro-flamegraph .flamegraph-table th span,
+pyro-flamegraph .flamegraph-table td span {
+  text-shadow: 0 0 1px var(--ps-table-row-text-shadow);
+}
+pyro-flamegraph .flamegraph-table th:first-child,
+pyro-flamegraph .flamegraph-table td:first-child {
+  border-left: none;
+  text-align: left;
+  width: auto;
+  min-width: auto;
+  max-width: auto;
+  white-space: nowrap;
+}
+pyro-flamegraph .flamegraph-table th:first-child .color-reference,
+pyro-flamegraph .flamegraph-table td:first-child .color-reference {
+  position: absolute;
+  left: 10px;
+  bottom: 0;
+  top: 0;
+  margin: auto;
+}
+pyro-flamegraph .flamegraph-table.flamegraph-table-doubles th,
+pyro-flamegraph .flamegraph-table.flamegraph-table-doubles td {
+  width: 130px;
+  min-width: 130px;
+  max-width: 130px;
+}
+pyro-flamegraph .flamegraph-table.flamegraph-table-doubles th:first-child,
+pyro-flamegraph .flamegraph-table.flamegraph-table-doubles td:first-child {
+  width: auto;
+  min-width: auto;
+  max-width: auto;
+}
+pyro-flamegraph .flamegraph-table .symbol-name {
+  font-size: 14px;
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+pyro-flamegraph .flamegraph-table th {
+  padding: 6px 10px;
+}
+pyro-flamegraph .flamegraph-table tr th,
+pyro-flamegraph .flamegraph-table tr:nth-child(2n) td {
+  background: var(--ps-neutral-9);
+}
+pyro-flamegraph .flamegraph-table td {
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+pyro-flamegraph .flamegraph-table td:first-child {
+  margin-left: 15px;
+  position: relative;
+}
+pyro-flamegraph .flamegraph-table td:first-child .color-reference + div {
+  margin-left: 15px;
+}
+pyro-flamegraph .flamegraph-table td .table-item-button {
+  border: none;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: baseline;
+  width: 100%;
+  cursor: pointer;
+  background-color: transparent;
+}
+pyro-flamegraph .flamegraph-table .unsupported-format {
+  text-align: center;
+  padding: 15px 40px;
+}
+pyro-flamegraph .color-reference {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+  margin-right: 5px;
+}
+pyro-flamegraph .navbar .navbar-link,
+pyro-flamegraph .footer .navbar-link {
+  margin-left: 30px;
+}
+pyro-flamegraph .navbar .navbar-link a,
+pyro-flamegraph .footer .navbar-link a {
+  color: var(--ps-neutral-2);
+  text-decoration: none;
+  font-weight: 500;
+}
+pyro-flamegraph .navbar .navbar-link a:hover,
+pyro-flamegraph .footer .navbar-link a:hover {
+  color: var(--ps-neutral-2);
+  cursor: pointer;
+}
+pyro-flamegraph .btn-group {
+  display: flex;
+}
+pyro-flamegraph .btn-group .btn {
+  border-radius: 0;
+  border-left: none;
+}
+pyro-flamegraph .btn-group .btn:first-child {
+  border-left: 1px solid var(--ps-ui-border);
+  border-radius: 4px 0 0 4px;
+}
+pyro-flamegraph .btn-group .btn:last-child {
+  border-radius: 0 4px 4px 0;
+}
+pyro-flamegraph *,
+pyro-flamegraph ::before,
+pyro-flamegraph ::after {
+  box-sizing: border-box;
+}
+pyro-flamegraph ::before,
+pyro-flamegraph ::after {
+  text-decoration: inherit; /* 1 */
+  vertical-align: inherit; /* 2 */
+}
+pyro-flamegraph html {
+  cursor: default; /* 1 */
+  line-height: 1.5; /* 2 */
+  -moz-tab-size: 4; /* 3 */
+  -o-tab-size: 4;
+  tab-size: 4; /* 3 */
+  -webkit-tap-highlight-color: transparent;
+  -ms-text-size-adjust: 100%; /* 5 */
+  -webkit-text-size-adjust: 100%; /* 5 */
+  word-break: break-word; /* 6 */
+}
+pyro-flamegraph body {
+  margin: 0;
+}
+pyro-flamegraph h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+pyro-flamegraph dl dl,
+pyro-flamegraph dl ol,
+pyro-flamegraph dl ul,
+pyro-flamegraph ol dl,
+pyro-flamegraph ul dl {
+  margin: 0;
+}
+pyro-flamegraph ol ol,
+pyro-flamegraph ol ul,
+pyro-flamegraph ul ol,
+pyro-flamegraph ul ul {
+  margin: 0;
+}
+pyro-flamegraph hr {
+  height: 0; /* 1 */
+  overflow: visible; /* 2 */
+}
+pyro-flamegraph main {
+  display: block;
+}
+pyro-flamegraph nav ol,
+pyro-flamegraph nav ul {
+  list-style: none;
+  padding: 0;
+}
+pyro-flamegraph pre {
+  font-family: monospace, monospace; /* 1 */
+  font-size: 1em; /* 2 */
+}
+pyro-flamegraph a {
+  background-color: transparent;
+}
+pyro-flamegraph abbr[title] {
+  text-decoration: underline;
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted;
+}
+pyro-flamegraph b,
+pyro-flamegraph strong {
+  font-weight: bolder;
+}
+pyro-flamegraph code,
+pyro-flamegraph kbd,
+pyro-flamegraph samp {
+  font-family: monospace, monospace; /* 1 */
+  font-size: 1em; /* 2 */
+}
+pyro-flamegraph small {
+  font-size: 80%;
+}
+pyro-flamegraph audio,
+pyro-flamegraph canvas,
+pyro-flamegraph iframe,
+pyro-flamegraph img,
+pyro-flamegraph svg,
+pyro-flamegraph video {
+  vertical-align: middle;
+}
+pyro-flamegraph audio,
+pyro-flamegraph video {
+  display: inline-block;
+}
+pyro-flamegraph audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+pyro-flamegraph iframe {
+  border-style: none;
+}
+pyro-flamegraph img {
+  border-style: none;
+}
+pyro-flamegraph svg:not([fill]) {
+  fill: currentColor;
+}
+pyro-flamegraph svg:not(:root) {
+  overflow: hidden;
+}
+pyro-flamegraph table {
+  border-collapse: collapse;
+}
+pyro-flamegraph button,
+pyro-flamegraph input,
+pyro-flamegraph select {
+  margin: 0;
+}
+pyro-flamegraph button {
+  overflow: visible; /* 1 */
+  text-transform: none; /* 2 */
+}
+pyro-flamegraph button,
+pyro-flamegraph [type='button'],
+pyro-flamegraph [type='reset'],
+pyro-flamegraph [type='submit'] {
+  -webkit-appearance: button;
+}
+pyro-flamegraph fieldset {
+  border: 1px solid #a0a0a0; /* 1 */
+  padding: 0.35em 0.75em 0.625em; /* 2 */
+}
+pyro-flamegraph input {
+  overflow: visible;
+}
+pyro-flamegraph legend {
+  color: inherit; /* 2 */
+  display: table; /* 1 */
+  max-width: 100%; /* 1 */
+  white-space: normal; /* 1 */
+}
+pyro-flamegraph progress {
+  display: inline-block; /* 1 */
+  vertical-align: baseline; /* 2 */
+}
+pyro-flamegraph select {
+  text-transform: none;
+}
+pyro-flamegraph textarea {
+  margin: 0; /* 1 */
+  overflow: auto; /* 2 */
+  resize: vertical; /* 3 */
+}
+pyro-flamegraph [type='checkbox'],
+pyro-flamegraph [type='radio'] {
+  padding: 0;
+}
+pyro-flamegraph [type='search'] {
+  -webkit-appearance: textfield; /* 1 */
+  outline-offset: -2px; /* 2 */
+}
+pyro-flamegraph ::-webkit-inner-spin-button,
+pyro-flamegraph ::-webkit-outer-spin-button {
+  height: auto;
+}
+pyro-flamegraph ::-webkit-input-placeholder {
+  color: inherit;
+  opacity: 0.54;
+}
+pyro-flamegraph ::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+pyro-flamegraph ::-webkit-file-upload-button {
+  -webkit-appearance: button; /* 1 */
+  font: inherit; /* 2 */
+}
+pyro-flamegraph ::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+pyro-flamegraph :-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+pyro-flamegraph :-moz-ui-invalid {
+  box-shadow: none;
+}
+pyro-flamegraph details {
+  display: block;
+}
+pyro-flamegraph dialog {
+  background-color: white;
+  border: solid;
+  color: black;
+  display: block;
+  height: -moz-fit-content;
+  height: fit-content;
+  left: 0;
+  margin: auto;
+  padding: 1em;
+  position: absolute;
+  right: 0;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+pyro-flamegraph dialog:not([open]) {
+  display: none;
+}
+pyro-flamegraph summary {
+  display: list-item;
+}
+pyro-flamegraph canvas {
+  display: inline-block;
+}
+pyro-flamegraph template {
+  display: none;
+}
+pyro-flamegraph a,
+pyro-flamegraph area,
+pyro-flamegraph button,
+pyro-flamegraph input,
+pyro-flamegraph label,
+pyro-flamegraph select,
+pyro-flamegraph summary,
+pyro-flamegraph textarea,
+pyro-flamegraph [tabindex] {
+  /* 1 */
+  touch-action: manipulation; /* 2 */
+}
+pyro-flamegraph [hidden] {
+  display: none;
+}
+pyro-flamegraph [aria-busy='true'] {
+  cursor: progress;
+}
+pyro-flamegraph [aria-controls] {
+  cursor: pointer;
+}
+pyro-flamegraph [aria-disabled='true'],
+pyro-flamegraph [disabled] {
+  cursor: not-allowed;
+}
+pyro-flamegraph [aria-hidden='false'][hidden] {
+  display: initial;
+}
+pyro-flamegraph [aria-hidden='false'][hidden]:not(:focus) {
+  clip: rect(0, 0, 0, 0);
+  position: absolute;
+}
+pyro-flamegraph button,
+pyro-flamegraph input,
+pyro-flamegraph select,
+pyro-flamegraph textarea {
+  background-color: transparent; /* 1 */
+  border: 1px solid WindowFrame; /* 1 */
+  color: inherit; /* 1 */
+  font: inherit; /* 2 */
+  letter-spacing: inherit; /* 2 */
+  padding: 0.25em 0.375em; /* 1 */
+}
+pyro-flamegraph select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background: no-repeat right center/1em;
+  border-radius: 0;
+  padding-right: 1em;
+}
+pyro-flamegraph select:not([multiple]):not([size]) {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='4'%3E%3Cpath d='M4 0h6L7 4'/%3E%3C/svg%3E");
+}
+pyro-flamegraph ::-ms-expand {
+  display: none;
+}
+pyro-flamegraph :-ms-input-placeholder {
+  color: rgba(0, 0, 0, 0.54);
+}
+pyro-flamegraph :focus-visible {
+  /* sanitize uses dotted, let's use the browser's default */
+  outline: revert !important;
+} /*# sourceMappingURL=flamegraph.css.map */

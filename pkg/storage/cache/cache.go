@@ -108,6 +108,8 @@ func New(c Config) *Cache {
 }
 
 func (cache *Cache) Put(key string, val interface{}) {
+	// fmt.Println("cache put key", key)
+	// fmt.Println("cache put val", val)
 	cache.lfu.Set(key, val)
 }
 
@@ -214,6 +216,8 @@ func dropPrefixBatch(db *badger.DB, p []byte, n int) (bool, error) {
 }
 
 func (cache *Cache) GetOrCreate(key string) (interface{}, error) {
+
+	// fmt.Println("cache GetOrCreate key", key)
 	return cache.get(key, true)
 }
 
@@ -223,12 +227,20 @@ func (cache *Cache) Lookup(key string) (interface{}, bool) {
 }
 
 func (cache *Cache) get(key string, createNotFound bool) (interface{}, error) {
+
+	// fmt.Println("correct function called")
+
 	cache.metrics.ReadsCounter.Inc()
 	return cache.lfu.GetOrSet(key, func() (interface{}, error) {
 		cache.metrics.MissesCounter.Inc()
 		var buf []byte
 		err := cache.db.View(func(txn *badger.Txn) error {
+
+			fmt.Println("cache.prefix", cache.prefix)
+			fmt.Println("key", key)
+
 			item, err := txn.Get([]byte(cache.prefix + key))
+			// fmt.Println("item", item)
 			if err != nil {
 				return err
 			}

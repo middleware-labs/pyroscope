@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 	"strconv"
 	"time"
 
@@ -43,11 +44,12 @@ type renderParams struct {
 
 type renderMetadataResponse struct {
 	flamebearer.FlamebearerMetadataV1
-	AppName   string `json:"appName"`
-	StartTime int64  `json:"startTime"`
-	EndTime   int64  `json:"endTime"`
-	Query     string `json:"query"`
-	MaxNodes  int    `json:"maxNodes"`
+	AccountUID string `json:"accountUid"`
+	AppName    string `json:"appName"`
+	StartTime  int64  `json:"startTime"`
+	EndTime    int64  `json:"endTime"`
+	Query      string `json:"query"`
+	MaxNodes   int    `json:"maxNodes"`
 }
 
 type annotationsResponse struct {
@@ -86,6 +88,9 @@ func NewRenderHandler(
 	historyMgr history.Manager,
 	annotationsService api.AnnotationsService,
 ) *RenderHandler {
+
+	fmt.Println("typeof getter", reflect.TypeOf(s))
+
 	return &RenderHandler{
 		log:                l,
 		storage:            s,
@@ -99,11 +104,19 @@ func NewRenderHandler(
 }
 
 func (rh *RenderHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+	// Allow CORS requests
+	// w.Header().Set("Access-Control-Allow-Origin", "*")
+	// w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+	// w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
 	var p renderParams
 	if err := rh.renderParametersFromRequest(r, &p); err != nil {
 		rh.httpUtils.WriteInvalidParameterError(r, w, err)
 		return
 	}
+
+	fmt.Println("rh.storage >>", reflect.TypeOf(rh.storage))
 
 	out, err := rh.storage.Get(r.Context(), p.gi)
 	var appName string
@@ -112,6 +125,9 @@ func (rh *RenderHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	} else if p.gi.Query != nil {
 		appName = p.gi.Query.AppName
 	}
+
+	uid := p.gi.AccountUID
+
 	filename := fmt.Sprintf("%v %v", appName, p.gi.StartTime.UTC().Format(time.RFC3339))
 	rh.stats.StatsInc("render")
 	if err != nil {
@@ -127,6 +143,9 @@ func (rh *RenderHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	switch p.format {
 	case "json":
+
+		fmt.Println("json response pyroscope", reflect.TypeOf(out))
+
 		flame := flamebearer.NewProfile(flamebearer.ProfileConfig{
 			Name:      filename,
 			MaxNodes:  p.maxNodes,
@@ -135,6 +154,7 @@ func (rh *RenderHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			Groups:    out.Groups,
 			Telemetry: out.Telemetry,
 			Metadata: metadata.Metadata{
+				// AccountUID:      out.AccountUID,
 				SpyName:         out.SpyName,
 				SampleRate:      out.SampleRate,
 				Units:           out.Units,
@@ -143,14 +163,14 @@ func (rh *RenderHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		})
 
 		// Look up annotations
-		annotations, err := rh.annotationsService.FindAnnotationsByTimeRange(r.Context(), appName, p.gi.StartTime, p.gi.EndTime)
+		annotations, err := rh.annotationsService.FindAnnotationsByTimeRange(r.Context(), uid, appName, p.gi.StartTime, p.gi.EndTime)
 		if err != nil {
 			rh.log.Error(err)
 			// it's better to not show any annotations than falling the entire request
 			annotations = []model.Annotation{}
 		}
 
-		res := rh.mountRenderResponse(flame, appName, p.gi, p.maxNodes, annotations)
+		res := rh.mountRenderResponse(flame, uid, appName, p.gi, p.maxNodes, annotations)
 		rh.httpUtils.WriteResponseJSON(r, w, res)
 	case "pprof":
 		pprof := out.Tree.Pprof(&tree.PprofMetadata{
@@ -191,9 +211,10 @@ func (rh *RenderHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 // Enhance the flamebearer with a few additional fields the UI requires
-func (*RenderHandler) mountRenderResponse(flame flamebearer.FlamebearerProfile, appName string, gi *storage.GetInput, maxNodes int, annotations []model.Annotation) renderResponse {
+func (*RenderHandler) mountRenderResponse(flame flamebearer.FlamebearerProfile, uid string, appName string, gi *storage.GetInput, maxNodes int, annotations []model.Annotation) renderResponse {
 	md := renderMetadataResponse{
 		FlamebearerMetadataV1: flame.Metadata,
+		AccountUID:            uid,
 		AppName:               appName,
 		StartTime:             gi.StartTime.Unix(),
 		EndTime:               gi.EndTime.Unix(),
@@ -221,7 +242,11 @@ func (rh *RenderHandler) renderParametersFromRequest(r *http.Request, p *renderP
 	p.gi = new(storage.GetInput)
 
 	k := v.Get("name")
+	uid := v.Get("uid")
 	q := v.Get("query")
+
+	fmt.Println("k name", k)
+	fmt.Println("q query", q)
 	p.gi.GroupBy = v.Get("groupBy")
 
 	switch {
@@ -235,6 +260,8 @@ func (rh *RenderHandler) renderParametersFromRequest(r *http.Request, p *renderP
 		p.gi.Key = sk
 	case q != "":
 		qry, err := flameql.ParseQuery(q)
+
+		fmt.Println("query...", qry)
 		if err != nil {
 			return fmt.Errorf("query: %w", err)
 		}
@@ -255,6 +282,8 @@ func (rh *RenderHandler) renderParametersFromRequest(r *http.Request, p *renderP
 	p.gi.StartTime = attime.Parse(v.Get("from"))
 	p.gi.EndTime = attime.Parse(v.Get("until"))
 	p.format = v.Get("format")
+
+	p.gi.AccountUID = uid
 
 	return expectFormats(p.format)
 }

@@ -1,0 +1,167 @@
+/* SCSS HEX */
+/* SCSS HEX */
+/* SCSS HEX */
+/* SCSS HEX */
+/* SCSS HEX */
+/* SCSS HEX */
+pre,
+code,
+tt {
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  font-size: 14px;
+}
+
+tt {
+  border-radius: 3px;
+  border: 1px solidver(--ps-gray-light-4);
+  padding: 2px 4px;
+  background-color: var(--ps-ui-foreground-text);
+}
+
+.navbar {
+  display: flex;
+  height: 60px;
+  align-items: center;
+}
+
+.navbar .logo {
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+  background-size: 40px 40px;
+  background-position: 0px 8px;
+  background-repeat: no-repeat;
+}
+.navbar .logo::after {
+  content: 'Pyroscope';
+  font-weight: 400;
+  padding-left: 44px;
+  font-size: 25px;
+  vertical-align: text-top;
+}
+
+.flamegraph-table {
+  width: 100%;
+  font-size: 14px;
+  border: 1px solid var(--ps-ui-border);
+}
+.flamegraph-table thead th {
+  color: var(--ps-neutral-2);
+}
+.flamegraph-table th,
+.flamegraph-table td {
+  color: var(--ps-neutral-2);
+  text-align: right;
+  padding: 0px 10px;
+  border-left: 1px solid var(--ps-ui-border);
+  border-bottom: 1px solid var(--ps-ui-border);
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
+}
+.flamegraph-table th span,
+.flamegraph-table td span {
+  text-shadow: 0 0 1px var(--ps-table-row-text-shadow);
+}
+.flamegraph-table th:first-child,
+.flamegraph-table td:first-child {
+  border-left: none;
+  text-align: left;
+  width: auto;
+  min-width: auto;
+  max-width: auto;
+  white-space: nowrap;
+}
+.flamegraph-table th:first-child .color-reference,
+.flamegraph-table td:first-child .color-reference {
+  position: absolute;
+  left: 10px;
+  bottom: 0;
+  top: 0;
+  margin: auto;
+}
+.flamegraph-table.flamegraph-table-doubles th,
+.flamegraph-table.flamegraph-table-doubles td {
+  width: 130px;
+  min-width: 130px;
+  max-width: 130px;
+}
+.flamegraph-table.flamegraph-table-doubles th:first-child,
+.flamegraph-table.flamegraph-table-doubles td:first-child {
+  width: auto;
+  min-width: auto;
+  max-width: auto;
+}
+.flamegraph-table .symbol-name {
+  font-size: 14px;
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+.flamegraph-table th {
+  padding: 6px 10px;
+}
+.flamegraph-table tr th,
+.flamegraph-table tr:nth-child(2n) td {
+  background: var(--ps-neutral-9);
+}
+.flamegraph-table td {
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+.flamegraph-table td:first-child {
+  margin-left: 15px;
+  position: relative;
+}
+.flamegraph-table td:first-child .color-reference + div {
+  margin-left: 15px;
+}
+.flamegraph-table td .table-item-button {
+  border: none;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: baseline;
+  width: 100%;
+  cursor: pointer;
+  background-color: transparent;
+}
+.flamegraph-table .unsupported-format {
+  text-align: center;
+  padding: 15px 40px;
+}
+
+.color-reference {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.navbar .navbar-link,
+.footer .navbar-link {
+  margin-left: 30px;
+}
+.navbar .navbar-link a,
+.footer .navbar-link a {
+  color: var(--ps-neutral-2);
+  text-decoration: none;
+  font-weight: 500;
+}
+.navbar .navbar-link a:hover,
+.footer .navbar-link a:hover {
+  color: var(--ps-neutral-2);
+  cursor: pointer;
+}
+
+.btn-group {
+  display: flex;
+}
+.btn-group .btn {
+  border-radius: 0;
+  border-left: none;
+}
+.btn-group .btn:first-child {
+  border-left: 1px solid var(--ps-ui-border);
+  border-radius: 4px 0 0 4px;
+}
+.btn-group .btn:last-child {
+  border-radius: 0 4px 4px 0;
+} /*# sourceMappingURL=common.css.map */

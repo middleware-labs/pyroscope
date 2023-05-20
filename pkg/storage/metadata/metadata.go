@@ -27,6 +27,7 @@ func (a AggregationType) String() string {
 }
 
 type Metadata struct {
+	AccountUID      string
 	SpyName         string
 	SampleRate      uint32
 	Units           Units

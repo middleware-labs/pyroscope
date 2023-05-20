@@ -2,6 +2,7 @@ package storage
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -10,6 +11,63 @@ import (
 	"github.com/dgraph-io/badger/v2"
 	"github.com/gorilla/mux"
 )
+
+func (s *Storage) ListKeys(w http.ResponseWriter, r *http.Request) {
+	select {
+	default:
+	case <-s.stop:
+		w.WriteHeader(http.StatusServiceUnavailable)
+		return
+	}
+
+	n := mux.Vars(r)["db"]
+	var d BadgerDBWithCache
+	switch n {
+	case "segments":
+		d = s.segments
+	case "trees":
+		d = s.trees
+	case "dicts":
+		d = s.dicts
+	case "dimensions":
+		d = s.dimensions
+	case "main":
+		d = s.main
+	default:
+		// Note that export from main DB is not allowed.
+		http.Error(w, fmt.Sprintf("database %q not found", n), http.StatusNotFound)
+		return
+	}
+
+	keys := make([]string, 0)
+	err := d.View(func(txn *badger.Txn) error {
+		it := txn.NewIterator(badger.DefaultIteratorOptions)
+		defer it.Close()
+
+		for it.Seek([]byte("")); it.Valid(); it.Next() {
+			item := it.Item()
+			key := string(item.Key())
+			keys = append(keys, key)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to retrieve keys from %s: %v", n, err), http.StatusInternalServerError)
+		return
+	}
+
+	// Convert keys to JSON and send the response
+	response, err := json.Marshal(keys)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to serialize keys: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(response)
+}
 
 func (s *Storage) DebugExport(w http.ResponseWriter, r *http.Request) {
 	select {
@@ -30,6 +88,8 @@ func (s *Storage) DebugExport(w http.ResponseWriter, r *http.Request) {
 		d = s.dicts
 	case "dimensions":
 		d = s.dimensions
+	case "main":
+		d = s.main
 	default:
 		// Note that export from main DB is not allowed.
 		http.Error(w, fmt.Sprintf("database %q not found", n), http.StatusNotFound)

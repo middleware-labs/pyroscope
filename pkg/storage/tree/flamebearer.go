@@ -19,6 +19,7 @@ type Flamebearer struct {
 	SampleRate uint32 `json:"sampleRate"`
 	Units      string `json:"units"`
 	Format     Format `json:"format"`
+	AccountUID string `json:"accountUID"`
 }
 
 var lostDuringRenderingName = jsonableSlice("other")

@@ -186,6 +186,14 @@ func (ctrl *Controller) serverMux() (http.Handler, error) {
 	r := mux.NewRouter()
 
 	r.Use(contentencoding.Decode())
+	r.Use(func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Access-Control-Allow-Methods", "*")
+			w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+			next.ServeHTTP(w, r)
+		})
+	})
 
 	ctrl.jwtTokenService = service.NewJWTTokenService(
 		[]byte(ctrl.config.Auth.JWTSecret),
@@ -332,6 +340,7 @@ func (ctrl *Controller) serverMux() (http.Handler, error) {
 		{"/build", ctrl.buildHandler},
 		{"/targets", ctrl.activeTargetsHandler},
 		{"/debug/storage/export/{db}", ctrl.storage.DebugExport},
+		{"/debug/storage/export/keys/{db}", ctrl.storage.ListKeys},
 	}
 	if !ctrl.config.DisablePprofEndpoint {
 		diagnosticSecureRoutes = append(diagnosticSecureRoutes, []route{

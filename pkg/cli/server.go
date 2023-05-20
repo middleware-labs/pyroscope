@@ -86,11 +86,14 @@ func newServerService(c *config.Server) (*serverService, error) {
 		done:    make(chan struct{}),
 	}
 
+	// c.StoragePath = filepath.Join(c.StoragePath, "defaultdb")
+
 	diskPressure := health.DiskPressure{
 		Threshold: c.MinFreeSpacePercentage,
 		Path:      c.StoragePath,
 	}
 
+	// fmt.Println("sqlstore open c >>>", c.Server)
 	svc.database, err = sqlstore.Open(c)
 	if err != nil {
 		return nil, fmt.Errorf("can't open database %q: %w", c.Database.URL, err)
@@ -160,8 +163,10 @@ func newServerService(c *config.Server) (*serverService, error) {
 
 	var ingester ingestion.Ingester
 	if !svc.config.RemoteWrite.Enabled || !svc.config.RemoteWrite.DisableLocalWrites {
+		// fmt.Println("local writes enabled ---")
 		ingester = parser.New(svc.logger, svc.storageQueue, metricsExporter)
 	} else {
+		// fmt.Println("else writes noop ingester ---")
 		ingester = ingestion.NewNoopIngester()
 	}
 

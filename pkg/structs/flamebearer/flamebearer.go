@@ -88,6 +88,8 @@ type FlamebearerMetadataV1 struct {
 	Units metadata.Units `json:"units"`
 	// A name that identifies the profile.
 	Name string `json:"name"`
+	// AccountUID is the tenant id of the profile.
+	AccountUID string `json:"accountUid"`
 }
 
 type FlamebearerTimelineV1 struct {

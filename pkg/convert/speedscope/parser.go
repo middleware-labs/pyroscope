@@ -45,6 +45,7 @@ func parseAll(rawData []byte, md ingestion.Metadata) ([]*storage.PutInput, error
 	results := make([]*storage.PutInput, 0, len(file.Profiles))
 	// Not a pointer, we _want_ to copy on call
 	input := storage.PutInput{
+		AccountUID: md.AccountUID,
 		StartTime:  md.StartTime,
 		EndTime:    md.EndTime,
 		SpyName:    md.SpyName,

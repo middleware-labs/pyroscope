@@ -1,0 +1,7 @@
+.notificationsComponent [class~='notification__close']::after {
+  font-size: 48px;
+  cursor: pointer;
+}
+.notificationsComponent [class~='notification__item'] {
+  cursor: auto !important;
+} /*# sourceMappingURL=Notifications.module.css.map */

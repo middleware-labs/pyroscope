@@ -17,10 +17,11 @@ import (
 )
 
 type GetInput struct {
-	StartTime time.Time
-	EndTime   time.Time
-	Key       *segment.Key
-	Query     *flameql.Query
+	StartTime  time.Time
+	EndTime    time.Time
+	Key        *segment.Key
+	Query      *flameql.Query
+	AccountUID string
 	// TODO: make this a part of the query
 	GroupBy string
 }
@@ -32,6 +33,7 @@ type GetOutput struct {
 	Count    uint64
 
 	// TODO: Replace with metadata.Metadata
+	AccountUID      string
 	SpyName         string
 	SampleRate      uint32
 	Units           metadata.Units
@@ -57,6 +59,9 @@ func (s *Storage) Get(ctx context.Context, gi *GetInput) (*GetOutput, error) {
 		"endTime":   gi.EndTime.String(),
 	})
 
+	fmt.Println("gi.Key", gi.Key)
+	fmt.Println("gi.Query", gi.Query)
+
 	var dimensionKeys func() []dimension.Key
 	switch {
 	case gi.Key != nil:
@@ -69,6 +74,8 @@ func (s *Storage) Get(ctx context.Context, gi *GetInput) (*GetOutput, error) {
 		// Should never happen.
 		return nil, fmt.Errorf("key or query must be specified")
 	}
+
+	fmt.Println("dimensionKeys", dimensionKeys)
 
 	s.getTotal.Inc()
 	logger.Debug("storage.Get")
@@ -102,6 +109,7 @@ func (s *Storage) Get(ctx context.Context, gi *GetInput) (*GetOutput, error) {
 			continue
 		}
 		key := parsedKey.SegmentKey()
+		fmt.Println("segment lookup")
 		res, ok := s.segments.Lookup(key)
 		if !ok {
 			continue
@@ -123,6 +131,7 @@ func (s *Storage) Get(ctx context.Context, gi *GetInput) (*GetOutput, error) {
 		trace.Logf(ctx, traceCatGetCallback, "segment_key=%s", key)
 		st.GetContext(ctx, gi.StartTime, gi.EndTime, func(depth int, samples, writes uint64, t time.Time, r *big.Rat) {
 			tk := parsedKey.TreeKey(depth, t)
+			fmt.Println("tree lookup")
 			res, ok = s.trees.Lookup(tk)
 			trace.Logf(ctx, traceCatGetCallback, "tree_found=%v time=%d r=%v", ok, t.Unix(), r)
 			if ok {
@@ -142,6 +151,14 @@ func (s *Storage) Get(ctx context.Context, gi *GetInput) (*GetOutput, error) {
 	}
 
 	md := lastSegment.GetMetadata()
+
+	// fmt.Println("lastsegment metadata >>", md.AccountUID, md.SpyName, md.SampleRate, md.Units, md.AggregationType)
+	fmt.Println("md.AccountUID", md.AccountUID)
+	fmt.Println("md/SpyName", md.SpyName)
+	fmt.Println("md.SampleRate", md.SampleRate)
+	fmt.Println("md.Units", md.Units)
+	fmt.Println("md.AggregationType", md.AggregationType)
+
 	switch md.AggregationType {
 	case averageAggregationType, "avg":
 		resultTrie = resultTrie.Clone(big.NewRat(1, int64(writesTotal)))
@@ -154,6 +171,7 @@ func (s *Storage) Get(ctx context.Context, gi *GetInput) (*GetOutput, error) {
 		SpyName:         md.SpyName,
 		SampleRate:      md.SampleRate,
 		Units:           md.Units,
+		AccountUID:      md.AccountUID,
 		AggregationType: md.AggregationType,
 		Count:           writesTotal,
 	}, nil
@@ -304,6 +322,7 @@ func (s *Storage) lookupDimensionRegex(m *flameql.TagMatcher) (*dimension.Dimens
 }
 
 func (s *Storage) lookupDimensionKV(k, v string) (*dimension.Dimension, bool) {
+	fmt.Println("dimension lookup")
 	r, ok := s.dimensions.Lookup(k + ":" + v)
 	if ok {
 		return r.(*dimension.Dimension), true

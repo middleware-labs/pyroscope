@@ -1,0 +1,18 @@
+.graphVizPane {
+  display: flex;
+  flex: 1;
+}
+.graphVizPane.graphVizPane {
+  margin-right: 0;
+  border: 1px solid var(--ps-ui-border);
+}
+.graphVizPane div[id^='graphviz'] {
+  width: 100%;
+  overflow: hidden;
+}
+.graphVizPane div[id^='graphviz'] :global .graph > polygon {
+  fill: none;
+}
+.graphVizPane div[id^='graphviz'] :global .edge text[text-anchor='middle'] {
+  fill: var(--ps-toolbar-icon-color);
+} /*# sourceMappingURL=GraphVizPanel.module.css.map */

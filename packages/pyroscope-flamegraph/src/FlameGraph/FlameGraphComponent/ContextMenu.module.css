@@ -1,0 +1,7 @@
+@import '@szhsin/react-menu/dist/index.css';
+.dummy {
+  display: block;
+}
+.dummy svg {
+  margin-right: 10px;
+} /*# sourceMappingURL=ContextMenu.module.css.map */

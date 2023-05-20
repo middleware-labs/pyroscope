@@ -4,11 +4,13 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"github.com/pyroscope-io/pyroscope/pkg/convert/pprof/streaming"
-	"github.com/pyroscope-io/pyroscope/pkg/stackbuilder"
+	"fmt"
 	"io"
 	"mime/multipart"
 	"sync"
+
+	"github.com/pyroscope-io/pyroscope/pkg/convert/pprof/streaming"
+	"github.com/pyroscope-io/pyroscope/pkg/stackbuilder"
 
 	"github.com/pyroscope-io/pyroscope/pkg/ingestion"
 	"github.com/pyroscope-io/pyroscope/pkg/storage"
@@ -116,17 +118,29 @@ func (p *RawProfile) Bytes() ([]byte, error) {
 }
 
 func (p *RawProfile) Parse(ctx context.Context, putter storage.Putter, _ storage.MetricsExporter, md ingestion.Metadata) error {
+
+	fmt.Println("convert/pprof")
+
 	p.m.Lock()
 	defer p.m.Unlock()
+
 	cont, err := p.handleRawData()
 	if err != nil || !cont {
 		return err
 	}
 
+	// fmt.Println("after handleRawData >> ", md.AccountUID)
 	if p.parser == nil {
+		// fmt.Println("p.parser == nil")
 		sampleTypes := p.getSampleTypes()
+
+		fmt.Println("sampletypes.. ", sampleTypes)
+
 		if p.StreamingParser {
+			fmt.Println("yes streaming ....", md.Key)
+			fmt.Println("yes streaming ....", md.Key.Labels())
 			config := streaming.ParserConfig{
+				AccountUID:  md.AccountUID,
 				SpyName:     md.SpyName,
 				Labels:      md.Key.Labels(),
 				Putter:      putter,
@@ -152,7 +166,10 @@ func (p *RawProfile) Parse(ctx context.Context, putter storage.Putter, _ storage
 				}
 			}
 		} else {
+			fmt.Println("not streaming ....", md.Key)
+			fmt.Println("not streaming ....", md.Key.Labels())
 			p.parser = NewParser(ParserConfig{
+				AccountUID:          md.AccountUID,
 				SpyName:             md.SpyName,
 				Labels:              md.Key.Labels(),
 				Putter:              putter,
@@ -172,6 +189,8 @@ func (p *RawProfile) Parse(ctx context.Context, putter storage.Putter, _ storage
 				return err
 			}
 		}
+	} else {
+		fmt.Println("blank")
 	}
 
 	if err := p.parser.ParsePprof(ctx, md.StartTime, md.EndTime, p.Profile, false); err != nil {

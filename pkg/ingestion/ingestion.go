@@ -15,9 +15,10 @@ type Ingester interface {
 }
 
 type IngestInput struct {
-	Format   Format
-	Profile  RawProfile
-	Metadata Metadata
+	AccountUID string
+	Format     Format
+	Profile    RawProfile
+	Metadata   Metadata
 }
 
 type Format string
@@ -40,6 +41,7 @@ type RawProfile interface {
 }
 
 type Metadata struct {
+	AccountUID      string
 	StartTime       time.Time
 	EndTime         time.Time
 	Key             *segment.Key

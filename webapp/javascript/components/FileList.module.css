@@ -1,0 +1,59 @@
+/* SCSS HEX */
+/* SCSS HEX */
+/* SCSS HEX */
+/* SCSS HEX */
+/* SCSS HEX */
+/* SCSS HEX */
+.tableContainer {
+  overflow-y: scroll;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+.tableContainer table {
+  font-size: 14px;
+}
+.tableContainer table th {
+  padding: 6px 10px;
+}
+.tableContainer table td {
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+.tableContainer table td:first-child {
+  margin-left: 15px;
+  position: relative;
+}
+.tableContainer table th span,
+.tableContainer table td span {
+  text-shadow: 0 0 1px var(--ps-table-row-text-shadow);
+}
+.tableContainer table th:first-child,
+.tableContainer table td:first-child {
+  border-left: none;
+  text-align: left;
+  width: auto;
+  min-width: auto;
+  max-width: initial;
+  white-space: nowrap;
+}
+.tableContainer table th:last-child,
+.tableContainer table td:last-child {
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
+  padding: 0px 10px;
+}
+.tableContainer table .profileName {
+  display: flex;
+  align-items: center;
+}
+.tableContainer table .profileName span {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: calc(100% - 30px);
+  margin-right: 10px;
+}
+
+.checkIcon {
+  margin-left: 8px;
+} /*# sourceMappingURL=FileList.module.css.map */

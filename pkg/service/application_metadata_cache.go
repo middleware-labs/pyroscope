@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"reflect"
 	"time"
 
@@ -55,6 +56,7 @@ func (svc *ApplicationMetadataCacheService) CreateOrUpdate(ctx context.Context, 
 
 // writeToBoth writes to both the cache and the underlying service
 func (svc *ApplicationMetadataCacheService) writeToBoth(ctx context.Context, application appmetadata.ApplicationMetadata) error {
+	fmt.Println("svc.appSvc >>>", reflect.TypeOf(svc.appSvc))
 	if err := svc.appSvc.CreateOrUpdate(ctx, application); err != nil {
 		return err
 	}

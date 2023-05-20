@@ -29,8 +29,10 @@ func (svc ApplicationMetadataService) Get(ctx context.Context, name string) (app
 		return app, err
 	}
 
+	// fmt.Println("appmetadata.AccountUID >>> ", app.AccountUID)
+
 	tx := svc.db.WithContext(ctx)
-	res := tx.Where("fq_name = ?", name).First(&app)
+	res := tx.Where("fq_name = ?", name).Where("accountUid = ?", app.AccountUID).First(&app)
 
 	switch {
 	case errors.Is(res.Error, gorm.ErrRecordNotFound):
@@ -47,9 +49,12 @@ func (svc ApplicationMetadataService) CreateOrUpdate(ctx context.Context, applic
 
 	tx := svc.db.WithContext(ctx)
 
+	// fmt.Println("accountUID >>>> ", application.AccountUID)
+
 	// Only update the field if it's populated
 	return tx.Where(appmetadata.ApplicationMetadata{
-		FQName: application.FQName,
+		FQName:     application.FQName,
+		AccountUID: application.AccountUID,
 	}).Assign(application).FirstOrCreate(&appmetadata.ApplicationMetadata{}).Error
 }
 

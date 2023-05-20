@@ -1,0 +1,32 @@
+.settingsTable {
+  margin: 20px 0;
+  width: 100%;
+}
+.settingsTable thead {
+  padding: 15px 0;
+  background-color: var(--ps-ui-foreground);
+}
+.settingsTable thead th {
+  text-align: left;
+  padding: 10px 20px;
+}
+.settingsTable tbody {
+  color: var(--ps-ui-foreground-text);
+}
+.settingsTable tbody tr:nth-child(odd) {
+  background-color: var(--ps-neutral-9);
+}
+.settingsTable tbody tr:nth-child(even) {
+  background-color: var(--ps-ui-foreground);
+}
+.settingsTable tbody td {
+  border: unset !important;
+  min-width: 50px;
+  text-align: left;
+  padding: 10px 20px;
+  min-width: initial;
+  width: initial;
+}
+.settingsTable tbody button {
+  padding: 5px 13px;
+} /*# sourceMappingURL=SettingsTable.module.css.map */

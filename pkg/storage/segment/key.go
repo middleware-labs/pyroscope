@@ -226,6 +226,8 @@ func (k *Key) Normalized() string {
 	}
 	sb.WriteString("}")
 
+	// mwdebug: sb.String() => k8s.ebpf.cpu{}
+
 	return sb.String()
 }
 

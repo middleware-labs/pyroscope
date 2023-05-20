@@ -16,6 +16,7 @@ import (
 )
 
 type PutInput struct {
+	AccountUID      string
 	StartTime       time.Time
 	EndTime         time.Time
 	Key             *segment.Key
@@ -34,11 +35,15 @@ func (s *Storage) Put(ctx context.Context, pi *PutInput) error {
 		return errRetention
 	}
 
+	// fmt.Println("storage.Put >>>>> Pi.Key >>>>>", pi.Key)
+
 	if err := segment.ValidateKey(pi.Key); err != nil {
 		return err
 	}
 
+	// fmt.Println("s.appsvc >>>>>", reflect.TypeOf(s.appSvc))
 	if err := s.appSvc.CreateOrUpdate(ctx, appmetadata.ApplicationMetadata{
+		AccountUID:      pi.AccountUID,
 		FQName:          pi.Key.AppName(),
 		SpyName:         pi.SpyName,
 		SampleRate:      pi.SampleRate,
@@ -49,6 +54,9 @@ func (s *Storage) Put(ctx context.Context, pi *PutInput) error {
 	}
 
 	s.putTotal.Inc()
+
+	// fmt.Println("--- pi.Key.HasProfileID()", pi.Key.HasProfileID())
+
 	if pi.Key.HasProfileID() {
 		if err := s.ensureAppSegmentExists(pi); err != nil {
 			return err
@@ -78,6 +86,11 @@ func (s *Storage) Put(ctx context.Context, pi *PutInput) error {
 			continue
 		}
 		r.(*dimension.Dimension).Insert([]byte(sk))
+
+		// mwdebug: reflect.TypeOf(s.dimensions) => *storage.db
+		// mwdebug: key => __name__:k8s.ebpf.cpu
+
+		// fmt.Println("dimension r", r)
 		s.dimensions.Put(key, r)
 	}
 
@@ -94,9 +107,14 @@ func (s *Storage) Put(ctx context.Context, pi *PutInput) error {
 		AggregationType: pi.AggregationType,
 	})
 
+	// mwdebug: returns count of samples
 	samples := pi.Val.Samples()
+
 	err = st.Put(pi.StartTime, pi.EndTime, samples, func(depth int, t time.Time, r *big.Rat, addons []segment.Addon) {
+
+		// mwdebug: returns something like  k:depth:unixtime
 		tk := pi.Key.TreeKey(depth, t)
+
 		res, err := s.trees.GetOrCreate(tk)
 		if err != nil {
 			s.logger.Errorf("trees cache for %v: %v", tk, err)

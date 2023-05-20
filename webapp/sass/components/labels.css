@@ -1,0 +1,71 @@
+@charset "UTF-8";
+/* SCSS HEX */
+/* SCSS HEX */
+/* SCSS HEX */
+/* SCSS HEX */
+/* SCSS HEX */
+/* SCSS HEX */
+.labels {
+  min-width: 350px;
+  visibility: none;
+}
+.labels.visible {
+  visibility: block;
+}
+.labels select {
+  margin-right: 10px;
+  width: -moz-fit-content;
+  width: fit-content;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.labels .label {
+  display: inline-block;
+  border: 1px solid var(--ps-ui-border);
+  border-radius: 4px;
+  background: #272727;
+  padding: 0 6px;
+  margin-right: 10px;
+  line-height: 1.6;
+}
+.labels .label:hover {
+  background: #3b3b3b;
+}
+.labels .label .label-name {
+  font-weight: 400;
+}
+.labels .label .label-name:after {
+  content: ': ';
+  display: inline;
+}
+.labels .label .label-delete-btn {
+  border: none;
+  padding: 0px;
+  position: relative;
+  cursor: pointer;
+}
+.labels .label .label-delete-btn::after {
+  content: '×';
+  display: block;
+  position: absolute;
+  font-weight: 400;
+  top: -30px;
+  right: -16px;
+  background: var(--ps-red-primary);
+  padding: 5px;
+  line-height: 0.65;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  opacity: 0;
+}
+.labels .label:hover .label-delete-btn::after {
+  opacity: 1;
+}
+
+.labels-new-label .labels-new-input {
+  width: 100px;
+  border-radius: 4px;
+  margin-right: 10px;
+} /*# sourceMappingURL=labels.css.map */

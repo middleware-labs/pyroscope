@@ -116,12 +116,13 @@ func createAPIKeyTableMigration() *gormigrate.Migration {
 
 func createAnnotationsTableMigration() *gormigrate.Migration {
 	type annotation struct {
-		ID        uint      `gorm:"primarykey"`
-		AppName   string    `gorm:"not null;default:null"`
-		Timestamp time.Time `form:"not null;default:null"`
-		Content   string    `gorm:"not null;default:null"`
-		CreatedAt time.Time
-		UpdatedAt time.Time
+		ID         uint      `gorm:"primarykey"`
+		AppName    string    `gorm:"not null;default:null"`
+		AccountUID string    `gorm:"not null;default:null;column:accountUid"`
+		Timestamp  time.Time `form:"not null;default:null"`
+		Content    string    `gorm:"not null;default:null"`
+		CreatedAt  time.Time
+		UpdatedAt  time.Time
 	}
 
 	return &gormigrate.Migration{
@@ -137,8 +138,9 @@ func createAnnotationsTableMigration() *gormigrate.Migration {
 
 func addIndexesUniqueTableMigration() *gormigrate.Migration {
 	type annotation struct {
-		AppName   string    `gorm:"index:idx_appname_timestamp,unique;not null;default:null"`
-		Timestamp time.Time `gorm:"index:idx_appname_timestamp,unique;not null;default:null"`
+		AppName    string    `gorm:"index:idx_appname_timestamp,unique;not null;default:null"`
+		Timestamp  time.Time `gorm:"index:idx_appname_timestamp,unique;not null;default:null"`
+		AccountUID string    `gorm:"index:idx_appname_timestamp,unique;not null;default:null; column:accountUid"`
 	}
 
 	return &gormigrate.Migration{
@@ -155,13 +157,14 @@ func addIndexesUniqueTableMigration() *gormigrate.Migration {
 func createApplicationMetadataTableMigration() *gormigrate.Migration {
 	type applicationMetadata struct {
 		ID              uint   `gorm:"primarykey"`
-		FQName          string `gorm:"uniqueIndex;not null;default:null"`
+		FQName          string `gorm:"index:idx_account_fqname,unique;not null;default:null"`
 		SpyName         string
 		SampleRate      uint32
 		Units           string
 		AggregationType string
 		CreatedAt       time.Time
 		UpdatedAt       time.Time
+		AccountUID      string `gorm:"column:accountUid;index:idx_account_fqname,unique;not null;default:null"`
 	}
 
 	return &gormigrate.Migration{

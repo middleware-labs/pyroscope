@@ -1,0 +1,119 @@
+.button {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  border: 1px solid var(--ps-ui-border);
+  border-radius: 4px;
+}
+.button[type='button'],
+.button[type='reset'],
+.button[type='submit'] {
+  -webkit-appearance: button;
+}
+
+.noIcon {
+  min-width: 48px;
+}
+
+.noBox {
+  border: none;
+  border-radius: none;
+  background: inherit !important;
+}
+
+.customIcon svg {
+  width: 1rem;
+  margin-right: 5px;
+  vertical-align: -0.125em;
+}
+
+.iconWithText {
+  margin-right: 5px;
+}
+
+.default,
+.outline,
+.float {
+  background: var(--ps-ui-element-bg-primary);
+}
+.default:hover:not(:disabled),
+.outline:hover:not(:disabled),
+.float:hover:not(:disabled) {
+  background-color: var(--ps-ui-element-bg-highlight);
+}
+.default:disabled,
+.outline:disabled,
+.float:disabled {
+  color: var(--ps-disabled-button-text);
+  pointer-events: none;
+}
+
+.primary {
+  border-color: transparent;
+  color: var(--ps-button-switch-text) !important;
+  background-color: var(--ps-button-switch-bg);
+}
+.primary:hover {
+  background-color: var(--ps-button-switch-bg-highlight);
+}
+.primary:disabled {
+  background-color: var(--ps-green-disabled);
+  pointer-events: none;
+}
+
+.secondary {
+  border-color: transparent;
+  color: var(--ps-immutable-off-white);
+  background-color: var(--ps-blue-primary);
+}
+.secondary:hover {
+  background-color: var(--ps-blue-highlight);
+}
+.secondary:disabled {
+  background-color: var(--ps-blue-disabled);
+  pointer-events: none;
+}
+
+.float {
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.danger {
+  border-color: transparent;
+  color: var(--ps-neutral-2);
+  background-color: var(--ps-red-primary);
+}
+.danger:hover {
+  background-color: var(--ps-red-highlight);
+}
+.danger:disabled {
+  background-color: var(--ps-red-disabled);
+  pointer-events: none;
+}
+
+.outline {
+  background-color: transparent;
+}
+.outline:hover:not(:disabled) {
+  background-color: rgba(144, 202, 249, 0.08);
+}
+
+.grouped {
+  margin: 0;
+  border-right: 0;
+  border-radius: 0;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.grouped:first-child {
+  border-left: 1px solid var(--ps-ui-border);
+  border-radius: 4px 0 0 4px;
+}
+
+.grouped:last-child {
+  border-right: 1px solid var(--ps-ui-border);
+  border-radius: 0 4px 4px 0;
+} /*# sourceMappingURL=Button.module.css.map */

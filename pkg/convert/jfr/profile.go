@@ -25,6 +25,7 @@ func (p *RawProfile) Bytes() ([]byte, error) { return p.RawData, nil }
 
 func (p *RawProfile) Parse(ctx context.Context, putter storage.Putter, _ storage.MetricsExporter, md ingestion.Metadata) error {
 	input := storage.PutInput{
+		AccountUID:      md.AccountUID,
 		StartTime:       md.StartTime,
 		EndTime:         md.EndTime,
 		Key:             md.Key,

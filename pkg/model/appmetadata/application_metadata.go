@@ -3,11 +3,11 @@ package appmetadata
 import "github.com/pyroscope-io/pyroscope/pkg/storage/metadata"
 
 type ApplicationMetadata struct {
-	// Fully Qualified Name. Eg app.cpu ({__name__}.{profile_type})
-	FQName string `gorm:"index,unique;not null;default:null" json:"name"`
-
+	FQName          string                   `gorm:"index:idx_fqname_accountuid,unique;not null;default:null" json:"name"`
 	SpyName         string                   `json:"spyName,omitempty"`
 	SampleRate      uint32                   `json:"sampleRate,omitempty"`
 	Units           metadata.Units           `json:"units,omitempty"`
 	AggregationType metadata.AggregationType `json:"-"`
+	// AccountUID      string                   `gorm:"index:idx_fqname_accountuid" json:"accountUid,omitempty" `
+	AccountUID string `gorm:"column:accountUid;json:"accountUid,omitempty;index:idx_fqname_accountuid,unique;not null;default:null"`
 }

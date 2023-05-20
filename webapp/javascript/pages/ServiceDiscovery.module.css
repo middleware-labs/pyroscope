@@ -1,0 +1,106 @@
+.serviceDiscoveryApp {
+  padding: 15px;
+  min-height: calc(100% - 70px);
+}
+.serviceDiscoveryApp .header {
+  margin: 0 0 10px;
+}
+.serviceDiscoveryApp .collapsibleHeader {
+  font-weight: bold;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.serviceDiscoveryApp .collapsibleSection {
+  margin: 10px 0;
+  max-width: 100%;
+  overflow: auto;
+}
+.serviceDiscoveryApp .target {
+  width: 100%;
+  grid-template-columns: 80px 1fr;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  -moz-column-gap: 10px;
+  column-gap: 10px;
+  row-gap: 5px;
+  height: -moz-fit-content;
+  height: fit-content;
+  padding: 15px;
+}
+.serviceDiscoveryApp .target th.tableCell {
+  vertical-align: bottom;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.serviceDiscoveryApp .target td.tableCell {
+  vertical-align: top;
+}
+.serviceDiscoveryApp tr:nth-child(2n) td {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+.serviceDiscoveryApp .buttonGroup {
+  margin: 10px 0 20px;
+}
+.serviceDiscoveryApp .buttonGroup button {
+  border: none;
+  border-right: 1px solid #004a99;
+}
+.serviceDiscoveryApp .buttonGroup button:last-child {
+  border-right: none;
+}
+.serviceDiscoveryApp .badge {
+  font-size: 12px;
+  display: inline-flex;
+  font-weight: bold;
+  color: white;
+  padding: 1px 5px;
+  line-height: 1.5;
+  border-radius: 5px;
+  margin: 0px 3px 3px 0;
+  white-space: pre-wrap;
+  -webkit-user-select: all;
+  -moz-user-select: all;
+  user-select: all;
+}
+.serviceDiscoveryApp .badge.info {
+  background: #007bff;
+}
+.serviceDiscoveryApp .badge.healthy {
+  background: #2ecc40;
+}
+.serviceDiscoveryApp .badge.error {
+  background: #dc3545;
+}
+.serviceDiscoveryApp .link {
+  color: #007bff;
+}
+
+.tableCell {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 5px;
+  text-align: left;
+  line-height: 1.25;
+}
+.tableCell.url {
+  min-width: 100px;
+}
+.tableCell.health {
+  min-width: 64px;
+}
+.tableCell.dicoveredLabels {
+  width: auto;
+}
+.tableCell.labels {
+  width: auto;
+}
+.tableCell.lastScrape {
+  min-width: 60px;
+}
+.tableCell.scrapeDuration {
+  min-width: 77px;
+}
+.tableCell.error {
+  min-width: 100px;
+} /*# sourceMappingURL=ServiceDiscovery.module.css.map */

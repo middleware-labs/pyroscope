@@ -1,0 +1,145 @@
+.heatmapContainer {
+  position: relative;
+  width: calc(100% - 80px);
+  margin: auto auto 10px auto;
+  min-height: 100px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+.heatmapContainer span[role='progressbar'] {
+  display: block;
+  text-align: center;
+  padding-top: 45px;
+}
+.heatmapContainer .heatmapSvg {
+  width: 100%;
+  cursor: crosshair;
+}
+.heatmapContainer .heatmapSvg .selectionContainer {
+  width: 100%;
+}
+.heatmapContainer .yAxis {
+  left: -40px;
+  width: 40px;
+  position: absolute;
+  display: flex;
+}
+.heatmapContainer .yAxis .axisUnits {
+  position: absolute;
+  top: -30px;
+  width: 60px;
+  font-size: 14px;
+}
+.heatmapContainer .yAxis .tickValues {
+  margin: -10px 0px;
+  width: 30px;
+}
+.heatmapContainer .yAxis .tickValues .tickValue {
+  position: relative;
+  height: 20px;
+}
+.heatmapContainer .yAxis .tickValues .tickValue span {
+  position: absolute;
+  display: block;
+  width: 40px;
+  right: 0;
+}
+.heatmapContainer .yAxis .ticksContainer {
+  border-right: 1px solid var(--ps-neutral-2);
+}
+.heatmapContainer .xAxis {
+  width: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+}
+.heatmapContainer .xAxis .tickValues {
+  flex-direction: row;
+}
+.heatmapContainer .xAxis .tickValues .tickValue {
+  width: 1px;
+  height: 20px;
+  position: relative;
+}
+.heatmapContainer .xAxis .tickValues span {
+  width: 115px;
+  display: inline-block;
+  position: absolute;
+  left: -60px;
+}
+.heatmapContainer .xAxis .tickValues .tickValue:first-child {
+  visibility: hidden;
+}
+.heatmapContainer .xAxis .ticksContainer {
+  position: relative;
+  left: -1px;
+  width: calc(100% + 1px);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 2px;
+  height: 10px;
+  margin-left: 0;
+  border-top: 1px solid var(--ps-neutral-2);
+}
+.heatmapContainer .xAxis .ticksContainer .tick {
+  width: 1px;
+  height: 8px;
+}
+.heatmapContainer .xAxis .ticksContainer .tick:first-child {
+  visibility: hidden;
+}
+.heatmapContainer .tickValues {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+}
+.heatmapContainer .tickValues .tickValue {
+  font-size: 12px;
+  text-align: center;
+}
+.heatmapContainer .tickValues .tickValue.yTickValue {
+  text-align: right;
+}
+.heatmapContainer .ticksContainer {
+  margin-left: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 8px;
+}
+.heatmapContainer .tick {
+  height: 1px;
+  background-color: var(--ps-neutral-2);
+}
+.heatmapContainer .selectedAreaBlock {
+  cursor: crosshair;
+  position: absolute;
+}
+.heatmapContainer .legend {
+  position: absolute;
+  right: -40px;
+  top: -30px;
+}
+.heatmapContainer .legend .units {
+  display: block;
+  font-size: 14px;
+  height: 20px;
+  margin-bottom: 10px;
+  line-height: 20px;
+}
+.heatmapContainer .legend .colorLabelContainer {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+}
+.heatmapContainer .legend .colorLabelContainer .label {
+  font-size: 10px;
+  line-height: 10px;
+  padding-right: 3px;
+}
+.heatmapContainer .legend .colorLabelContainer .color {
+  width: 12px;
+  height: 12px;
+  margin-bottom: 2px;
+} /*# sourceMappingURL=Heatmap.module.css.map */

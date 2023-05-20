@@ -1,0 +1,18 @@
+.input {
+  outline: none;
+  display: inline-block;
+  position: relative;
+  border-radius: 4px;
+  padding: 0.25em 0.375em;
+  border: 1px solid var(--ps-ui-border);
+}
+.input:focus {
+  outline: none;
+}
+.input:focus:active {
+  outline: none;
+}
+.input[type='search'] {
+  -webkit-appearance: textfield;
+  outline-offset: -2px;
+} /*# sourceMappingURL=Input.module.css.map */

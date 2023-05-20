@@ -121,19 +121,28 @@ func New(c *Config, logger *logrus.Logger, reg prometheus.Registerer, hc *health
 	if s.main, err = c.NewBadger("main", "", nil); err != nil {
 		return nil, err
 	}
+
+	// mwdebug: dictionaryPrefix d:
 	if s.dicts, err = c.NewBadger("dicts", dictionaryPrefix, dictionaryCodec{}); err != nil {
 		return nil, err
 	}
+
+	// mwdebug: dictionaryPrefix i:
 	if s.dimensions, err = c.NewBadger("dimensions", dimensionPrefix, dimensionCodec{}); err != nil {
 		return nil, err
 	}
+
+	// mwdebug: segmentPrefix s:
 	if s.segments, err = c.NewBadger("segments", segmentPrefix, segmentCodec{}); err != nil {
 		return nil, err
 	}
+
+	// mwdebug: treePrefix t:
 	if s.trees, err = c.NewBadger("trees", treePrefix, treeCodec{s}); err != nil {
 		return nil, err
 	}
 
+	// mwdebug: exemplarDataPrefix v:
 	pdb, err := c.NewBadger("profiles", exemplarDataPrefix, nil)
 	if err != nil {
 		return nil, err

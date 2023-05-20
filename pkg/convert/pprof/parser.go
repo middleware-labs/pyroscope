@@ -17,6 +17,7 @@ type ParserInterface interface {
 }
 
 type Parser struct {
+	accountUID          string
 	putter              storage.Putter
 	spyName             string
 	labels              map[string]string
@@ -29,6 +30,7 @@ type Parser struct {
 }
 
 type ParserConfig struct {
+	AccountUID          string
 	Putter              storage.Putter
 	SpyName             string
 	Labels              map[string]string
@@ -42,6 +44,7 @@ func NewParser(config ParserConfig) *Parser {
 		config.StackFrameFormatter = &UnsafeFunctionNameFormatter{}
 	}
 	return &Parser{
+		accountUID:          config.AccountUID,
 		putter:              config.Putter,
 		spyName:             config.SpyName,
 		labels:              config.Labels,
@@ -64,8 +67,21 @@ func filterKnownSamples(sampleTypes map[string]*tree.SampleTypeConfig) func(stri
 func (p *Parser) Reset() { p.cache = make(tree.LabelsCache) }
 
 func (p *Parser) ParsePprof(ctx context.Context, startTime, endTime time.Time, bs []byte, cumulativeOnly bool) error {
+
+	fmt.Println(" ParsePprof 1")
 	b := bytes.NewReader(bs)
 	return DecodePool(b, func(profile *tree.Profile) error {
+
+		// structType := reflect.TypeOf(profile)
+		// structValue := reflect.ValueOf(profile)
+
+		// // Iterate over the struct fields
+		// for i := 0; i < structType.NumField(); i++ {
+		// 	field := structType.Field(i)
+		// 	value := structValue.Field(i).Interface()
+		// 	fmt.Printf("%s: %v\n", field.Name, value)
+		// }
+
 		return p.Convert(ctx, startTime, endTime, profile, cumulativeOnly)
 	})
 }
@@ -80,11 +96,16 @@ func (p *Parser) Convert(ctx context.Context, startTime, endTime time.Time, prof
 		if !ok {
 			return false, fmt.Errorf("sample value type is unknown")
 		}
+
+		// fmt.Println("convert p.accountUID: ", p.accountUID)
+		// fmt.Println("convert p.AccountUID: ", p.AccountUID)
+
 		pi := storage.PutInput{
-			StartTime: startTime,
-			EndTime:   endTime,
-			SpyName:   p.spyName,
-			Val:       t,
+			AccountUID: p.accountUID,
+			StartTime:  startTime,
+			EndTime:    endTime,
+			SpyName:    p.spyName,
+			Val:        t,
 		}
 		// Cumulative profiles require two consecutive samples,
 		// therefore we have to cache this trie.
@@ -112,6 +133,8 @@ func (p *Parser) Convert(ctx context.Context, startTime, endTime time.Time, prof
 			pi.Units = metadata.Units(profile.StringTable[vt.Unit])
 		}
 		pi.Key = p.buildName(sampleType, profile.ResolveLabels(l))
+
+		// fmt.Println("putter---- ", reflect.TypeOf(p.putter))
 		err = p.putter.Put(ctx, &pi)
 		return sampleTypeConfig.Cumulative, err
 	})
@@ -153,6 +176,10 @@ func (p *Parser) iterate(x *tree.Profile, cumulativeOnly bool, fn func(vt *tree.
 	c := make(tree.LabelsCache)
 	p.readTrees(x, c, tree.NewFinder(x), cumulativeOnly)
 	for sampleType, entries := range c {
+
+		// fmt.Println("sampleType ---", sampleType)
+		// fmt.Println("entries", entries)
+
 		if t, ok := x.ResolveSampleType(sampleType); ok {
 			for h, e := range entries {
 				keep, err := fn(t, e.Labels, e.Tree)

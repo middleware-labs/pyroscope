@@ -16,17 +16,19 @@ var (
 )
 
 type Annotation struct {
-	AppName   string    `gorm:"index:idx_appname_timestamp,unique;not null;default:null"`
-	Timestamp time.Time `gorm:"index:idx_appname_timestamp,unique;not null;default:null"`
-	Content   string    `gorm:"not null;default:null"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	AccountUID string    `gorm:"index:idx_appname_timestamp,unique;not null;default:null; column:accountUid"`
+	AppName    string    `gorm:"index:idx_appname_timestamp,unique;not null;default:null"`
+	Timestamp  time.Time `gorm:"index:idx_appname_timestamp,unique;not null;default:null"`
+	Content    string    `gorm:"not null;default:null"`
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
 }
 
 type CreateAnnotation struct {
-	AppName   string
-	Content   string
-	Timestamp time.Time
+	AccountUID string
+	AppName    string
+	Content    string
+	Timestamp  time.Time
 }
 
 // Parse parses and validates

@@ -95,8 +95,9 @@ func (c *Controller) Unhealthy() []StatusMessage {
 // NotificationText satisfies server.Notifier.
 //
 // TODO(kolesnikovae): I think we need to make UI notifications
-//  structured (explicit status field) and support multiple messages.
-//  At the moment there can be only one notification.
+//
+//	structured (explicit status field) and support multiple messages.
+//	At the moment there can be only one notification.
 func (c *Controller) NotificationText() string {
 	if u := c.Unhealthy(); len(u) > 0 {
 		return u[0].Message
@@ -107,10 +108,10 @@ func (c *Controller) NotificationText() string {
 func (c *Controller) IsOutOfDiskSpace() bool {
 	c.m.RLock()
 	defer c.m.RUnlock()
-	for i := range c.conditions {
-		if _, ok := c.conditions[i].(DiskPressure); ok && c.current[i].Status > Healthy {
-			return true
-		}
-	}
+	// for i := range c.conditions {
+	// 	if _, ok := c.conditions[i].(DiskPressure); ok && c.current[i].Status > Healthy {
+	// 		return true
+	// 	}
+	// }
 	return false
 }

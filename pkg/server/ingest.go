@@ -3,12 +3,13 @@ package server
 import (
 	"bytes"
 	"fmt"
-	"github.com/go-kit/kit/log/logrus"
 	"io"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/go-kit/kit/log/logrus"
 
 	"github.com/pyroscope-io/pyroscope/pkg/convert/speedscope"
 
@@ -34,6 +35,7 @@ type ingestHandler struct {
 }
 
 func (ctrl *Controller) ingestHandler() http.Handler {
+	// fmt.Println("ingest handler working ....")
 	return NewIngestHandler(logrus.NewLogger(ctrl.log), ctrl.ingestser, func(pi *ingestion.IngestInput) {
 		ctrl.StatsInc("ingest")
 		ctrl.StatsInc("ingest:" + pi.Metadata.SpyName)
@@ -42,6 +44,8 @@ func (ctrl *Controller) ingestHandler() http.Handler {
 }
 
 func NewIngestHandler(l log.Logger, p ingestion.Ingester, onSuccess func(*ingestion.IngestInput), httpUtils httputils.ErrorUtils) http.Handler {
+
+	fmt.Println("server ingest handler working ....")
 	return ingestHandler{
 		log:       l,
 		ingester:  p,
@@ -51,6 +55,12 @@ func NewIngestHandler(l log.Logger, p ingestion.Ingester, onSuccess func(*ingest
 }
 
 func (h ingestHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+	// Allow CORS requests
+	// w.Header().Set("Access-Control-Allow-Origin", "*")
+	// w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+	// w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
 	input, err := h.ingestInputFromRequest(r)
 	if err != nil {
 		h.httpUtils.WriteError(r, w, http.StatusBadRequest, err, "invalid parameter")
@@ -112,6 +122,14 @@ func (h ingestHandler) ingestInputFromRequest(r *http.Request) (*ingestion.Inges
 		input.Metadata.SpyName = sn
 	} else {
 		input.Metadata.SpyName = "unknown"
+	}
+
+	if uid := q.Get("accountUid"); uid != "" {
+		// TODO: error handling
+		// fmt.Println("uid is >>>>>>>>> ", uid)
+		input.Metadata.AccountUID = uid
+	} else {
+		input.Metadata.AccountUID = "unknown"
 	}
 
 	if u := q.Get("units"); u != "" {

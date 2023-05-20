@@ -38,6 +38,7 @@ func updateMetrics(in *ingestion.IngestInput) {
 	requestsTotalCounter.WithLabelValues(profilerName).Inc()
 
 	data, err := in.Profile.Bytes()
+	// fmt.Println("profile bytes", data)
 	if err == nil {
 		requestsBytesCounter.WithLabelValues(profilerName).Add(float64(len(data)))
 	}
