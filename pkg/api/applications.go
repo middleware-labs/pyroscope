@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/pyroscope-io/pyroscope/pkg/model/appmetadata"
 	"github.com/pyroscope-io/pyroscope/pkg/server/httputils"
@@ -29,13 +30,22 @@ func NewApplicationsHandler(svc ApplicationListerAndDeleter, httpUtils httputils
 
 func (h *ApplicationsHandler) GetApps(w http.ResponseWriter, r *http.Request) {
 	apps, err := h.svc.List(r.Context())
+
+	filteredApps := make([]appmetadata.ApplicationMetadata, 0)
+
+	for _, app := range apps {
+		if strings.HasPrefix(app.FQName, r.URL.Query().Get("uid")) {
+			filteredApps = append(filteredApps, app)
+		}
+	}
+
 	if err != nil {
 		h.httpUtils.HandleError(r, w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	h.httpUtils.WriteResponseJSON(r, w, apps)
+	h.httpUtils.WriteResponseJSON(r, w, filteredApps)
 }
 
 type DeleteAppInput struct {
