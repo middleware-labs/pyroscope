@@ -1,2 +1,5 @@
-# this is an example config file for pyroscope server
----
+remote-write:
+  enabled: true
+  targets:
+    bar:
+      address: http://phlare-ingester.phlare-test.svc.cluster.local:4040

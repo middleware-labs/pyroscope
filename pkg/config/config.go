@@ -404,7 +404,7 @@ type Database struct {
 }
 
 type RemoteWrite struct {
-	Enabled            bool `def:"false" desc:"EXPERIMENTAL! the API will change, use at your own risk. whether to enable remote write or not"`
+	Enabled            bool `def:"true" desc:"EXPERIMENTAL! the API will change, use at your own risk. whether to enable remote write or not"`
 	DisableLocalWrites bool `def:"false" desc:"EXPERIMENTAL! the API will change, use at your own risk. whether to enable remote write or not" mapstructure:"disable-local-writes"`
 
 	// see loadRemoteWriteTargetConfigsFromFile in server.go
@@ -418,12 +418,12 @@ type RemoteRead struct {
 }
 
 type RemoteWriteTarget struct {
-	Address string `desc:"server that implements the pyroscope /ingest endpoint" mapstructure:"address"`
+	Address string `def:"http://phlare-ingester.phlare-test.svc.cluster.local:4040" desc:"server that implements the pyroscope /ingest endpoint" mapstructure:"address"`
 	// TODO(eh-am): use a custom type here to not accidentaly leak the AuthToken?
 	AuthToken         string            `json:"-" desc:"authorization token used to upload profiling data" yaml:"auth-token"`
 	BasicAuthUser     string            `json:"-" def:"" desc:"HTTP Basic authentication username" mapstructure:"basic-auth-user" yaml:"basic-auth-user"`
 	BasicAuthPassword string            `json:"-" def:"" desc:"HTTP Basic authentication password" mapstructure:"basic-auth-password" yaml:"basic-auth-password"`
-	ScopeOrgID        string            `def:"" desc:"Phlare tenant ID passed as X-Scope-OrgID http header" mapstructure:"scope-org-id" yaml:"scope-org-id"`
+	ScopeOrgID        string            `def:"test123" desc:"Phlare tenant ID passed as X-Scope-OrgID http header" mapstructure:"scope-org-id" yaml:"scope-org-id"`
 	Tags              map[string]string `name:"tag" desc:"tag in key=value form. The flag may be specified multiple times" mapstructure:"tags"`
 	Headers           map[string]string `name:"header" desc:"extra http header. The flag may be specified multiple times" mapstructure:"headers"`
 	Timeout           time.Duration     `desc:"profile upload timeout" mapstructure:"timeout" yaml:"timeout"`
