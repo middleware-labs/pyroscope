@@ -3,6 +3,7 @@ package segment
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 	"sync"
@@ -249,6 +250,7 @@ func (k *Key) Add(key, value string) {
 	if value == "" {
 		delete(k.labels, key)
 	} else {
+		fmt.Println("added here first")
 		k.labels[key] = value
 	}
 }

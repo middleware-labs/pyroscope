@@ -4,16 +4,18 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/pyroscope-io/pyroscope/pkg/agent/log"
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"path"
 	"runtime/debug"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/pyroscope-io/pyroscope/pkg/agent/log"
 
 	"github.com/pyroscope-io/pyroscope/pkg/agent/upstream"
 )
@@ -107,11 +109,17 @@ func (r *Remote) uploadProfile(j *upstream.UploadJob) error {
 	}
 
 	q := u.Query()
+	accountUid := os.Getenv("MW_ACCOUNT_UID")
+	j.Name = accountUid + "." + j.Name
 	q.Set("name", j.Name)
+
+	fmt.Println("j.Name >>", j.Name)
 	// TODO: I think these should be renamed to startTime / endTime
 	q.Set("from", strconv.Itoa(int(j.StartTime.Unix())))
 	q.Set("until", strconv.Itoa(int(j.EndTime.Unix())))
 	q.Set("spyName", j.SpyName)
+	q.Set("accountUid", accountUid)
+	q.Set("mwApiKey", os.Getenv("MW_API_KEY"))
 	q.Set("sampleRate", strconv.Itoa(int(j.SampleRate)))
 	q.Set("units", string(j.Units))
 	q.Set("aggregationType", string(j.AggregationType))
