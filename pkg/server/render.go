@@ -99,6 +99,7 @@ func NewRenderHandler(
 }
 
 func (rh *RenderHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
 	var p renderParams
 	if err := rh.renderParametersFromRequest(r, &p); err != nil {
 		rh.httpUtils.WriteInvalidParameterError(r, w, err)
